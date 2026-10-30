@@ -38,9 +38,6 @@ fn wait_for(rx: &mpsc::Receiver<RepoChanged>, scope: ChangeScope) -> bool {
     false
 }
 
-// On Linux the first batch after new folders names the watched folder itself, which counts as everything
-// (refs too). Left open until that is understood and handled: build output wakes the UI more there.
-#[cfg_attr(not(windows), ignore = "Linux reports the watched folder itself after new folders appear")]
 #[test]
 fn reports_branch_switches_and_file_edits() {
     let f = Fixture::new();
@@ -52,12 +49,14 @@ fn reports_branch_switches_and_file_edits() {
     })
     .unwrap();
 
-    // Watching for sure: a file written now is reported. Written again until it is, should the watch
-    // take a moment to start.
+    // Watching for sure: a file written now is reported by name. Written again until it is, should the watch
+    // take a moment to start. On Linux the watcher first reports the folders that already exist, the repo's
+    // git folder among them, as "everything changed": that batch must not count as the file's event, or it
+    // would land among the checks below.
     let armed = Instant::now() + NEVER;
     loop {
         std::fs::write(f.work.join("ready.txt"), "x").unwrap();
-        if matches!(rx.recv_timeout(Duration::from_secs(1)), Ok(ev) if ev.scopes.contains(&ChangeScope::Files)) {
+        if matches!(rx.recv_timeout(Duration::from_secs(1)), Ok(ev) if ev.files.iter().any(|n| n == "ready.txt")) {
             break;
         }
         assert!(Instant::now() < armed, "the watcher never reported a file");

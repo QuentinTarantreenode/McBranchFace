@@ -4,11 +4,11 @@ use std::collections::{HashMap, HashSet};
 use std::io::Write;
 use std::path::{Path, PathBuf};
 use std::process::Stdio;
-use std::time::Duration;
+use std::sync::mpsc;
+use std::time::{Duration, Instant};
 
 use anyhow::Result;
-use notify_debouncer_mini::notify::{RecommendedWatcher, RecursiveMode};
-use notify_debouncer_mini::{new_debouncer, DebounceEventResult, Debouncer};
+use notify::{recommended_watcher, Event, EventKind, RecommendedWatcher, RecursiveMode, Watcher};
 
 use crate::model::{ChangeScope, RepoChanged};
 
@@ -27,7 +27,7 @@ pub struct WatchedRepo {
 }
 
 pub struct RepoWatcher {
-    _debouncer: Debouncer<RecommendedWatcher>,
+    _watcher: RecommendedWatcher,
     /// Folders that could not be watched; every other one is.
     pub failed: Vec<UnwatchedRoot>,
 }
@@ -336,23 +336,77 @@ fn watch_roots(plan: Vec<(PathBuf, String, Vec<String>)>, mut watch_one: impl Fn
     failed
 }
 
+/// Whether an event says that something changed. Linux also reports every read, a git command opening
+/// HEAD or the index, as an access: counted, each refresh would read the repo and so cause the next one.
+fn is_change(kind: &EventKind) -> bool {
+    !matches!(kind, EventKind::Access(_))
+}
+
+/// What arrived within one debounce window: the changed paths, each once, and what the watcher lost.
+#[derive(Default)]
+struct Window {
+    paths: Vec<PathBuf>,
+    seen: HashSet<PathBuf>,
+    /// Events were lost for all repos (overflow, an error that names no path).
+    lost_all: bool,
+    lost: Vec<PathBuf>,
+}
+
+impl Window {
+    fn add(&mut self, res: notify::Result<Event>) {
+        match res {
+            Ok(ev) if ev.need_rescan() => self.lost_all = true,
+            Ok(ev) if is_change(&ev.kind) => {
+                for p in ev.paths {
+                    if self.seen.insert(p.clone()) {
+                        self.paths.push(p);
+                    }
+                }
+            }
+            Ok(_) => {}
+            Err(e) if e.paths.is_empty() => self.lost_all = true,
+            Err(e) => self.lost.extend(e.paths),
+        }
+    }
+
+    fn changes(&self, targets: &Targets, ignored: &mut Ignored) -> Vec<RepoChanged> {
+        let mut out = if self.lost_all { targets.lost(&[]) } else if self.lost.is_empty() { Vec::new() } else { targets.lost(&self.lost) };
+        if !self.paths.is_empty() {
+            out.extend(targets.changes(&self.paths, ignored));
+        }
+        out
+    }
+}
+
 /// Watches the repos; a folder that cannot be watched is skipped and named in `failed`, the others are
-/// watched all the same. An error only when the watcher itself cannot start.
+/// watched all the same. An error only when the watcher itself cannot start. Events of one window of
+/// `DEBOUNCE` are handed on together; the thread ends with the watcher.
 pub fn watch(repos: Vec<WatchedRepo>, emit: impl Fn(RepoChanged) + Send + 'static) -> Result<RepoWatcher> {
     let plan = watch_plan(&repos);
     let targets = Targets::of(&repos, &plan);
-    let mut ignored = Ignored::default();
-    let mut debouncer = new_debouncer(DEBOUNCE, move |res: DebounceEventResult| {
-        let changes = match res {
-            Ok(events) => targets.changes(&events.into_iter().map(|e| e.path).collect::<Vec<_>>(), &mut ignored),
-            Err(e) => targets.lost(&e.paths),
-        };
-        for c in changes {
-            emit(c);
-        }
+    let (tx, rx) = mpsc::channel::<notify::Result<Event>>();
+    let mut watcher = recommended_watcher(move |res| {
+        let _ = tx.send(res);
     })?;
-    let failed = watch_roots(plan, |root| debouncer.watcher().watch(root, RecursiveMode::Recursive).map_err(|e| e.to_string()));
-    Ok(RepoWatcher { _debouncer: debouncer, failed })
+    let failed = watch_roots(plan, |root| watcher.watch(root, RecursiveMode::Recursive).map_err(|e| e.to_string()));
+    std::thread::spawn(move || {
+        let mut ignored = Ignored::default();
+        while let Ok(first) = rx.recv() {
+            let mut window = Window::default();
+            window.add(first);
+            let end = Instant::now() + DEBOUNCE;
+            while let Some(left) = end.checked_duration_since(Instant::now()) {
+                match rx.recv_timeout(left) {
+                    Ok(res) => window.add(res),
+                    Err(_) => break,
+                }
+            }
+            for c in window.changes(&targets, &mut ignored) {
+                emit(c);
+            }
+        }
+    });
+    Ok(RepoWatcher { _watcher: watcher, failed })
 }
 
 #[cfg(test)]
@@ -365,6 +419,17 @@ mod tests {
             git_dir: "C:/ws/core/.git".into(),
             worktrees: vec!["C:/ws/core".into(), "C:/ws/core-wt".into()],
         }
+    }
+
+    #[test]
+    fn a_read_is_no_change() {
+        use notify::event::{AccessKind, AccessMode, CreateKind, DataChange, ModifyKind, RemoveKind};
+        assert!(!is_change(&EventKind::Access(AccessKind::Open(AccessMode::Any))));
+        assert!(!is_change(&EventKind::Access(AccessKind::Close(AccessMode::Write))));
+        assert!(is_change(&EventKind::Create(CreateKind::File)));
+        assert!(is_change(&EventKind::Modify(ModifyKind::Data(DataChange::Any))));
+        assert!(is_change(&EventKind::Remove(RemoveKind::Any)));
+        assert!(is_change(&EventKind::Any));
     }
 
     #[test]
