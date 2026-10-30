@@ -45,8 +45,15 @@ jobs:
       # Versions, types, lint, unused code, frontend and Rust tests, clippy, bindings drift, build with
       # start-bytes budget, test hooks in the bundle, the headless UI audit and dependency advisories.
       # Google Chrome ships with the runner images; the Rust tests bring their own git config.
-      - name: All gates
+      - name: All gates (Windows, with the UI audit)
+        if: runner.os == 'Windows'
         run: node scripts/verify.mjs
+
+      # The UI audit measures the text of the system font, and Linux runners have other fonts: the same
+      # layout reports cut-off text there. It runs where the interface is built and measured, on Windows.
+      - name: All gates but the UI audit (Linux)
+        if: runner.os == 'Linux'
+        run: node scripts/verify.mjs --only versions,types,lint,knip,vitest,clippy,rust-tests,bindings,build,bundle-hooks,audit
 
       - name: Render performance of a large scan
         if: runner.os == 'Linux'
