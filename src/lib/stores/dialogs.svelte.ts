@@ -46,6 +46,8 @@ class Dialogs {
   commitSearchOpen = $state(false);
   /** Repo (and optionally branch) the "create working copies" dialog is open for. */
   copiesFor = $state.raw<{ repoPath: string; branch: string | null } | null>(null);
+  /** The clone dialog is open; `parent` is the folder it starts with. */
+  cloneOpen = $state.raw<{ parent: string | null } | null>(null);
   /** The commit list in its own window: after the last push, own commits, the commits of a PR. */
   commitsView = $state.raw<CommitsView | null>(null);
   ask = $state.raw<Ask | null>(null);
@@ -59,6 +61,7 @@ class Dialogs {
     this.deletedOpen = false;
     this.commitSearchOpen = false;
     this.copiesFor = null;
+    this.cloneOpen = null;
     this.commitsView = null;
     this.ask = null;
   }

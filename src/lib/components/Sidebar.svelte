@@ -4,7 +4,7 @@
   import { sidebarSelection } from "$lib/stores/sidebarSelection.svelte";
   import { roving } from "$lib/ui/roving";
   import SectionTools from "./SectionTools.svelte";
-  import { FolderPlus, Layers, Plus, Search } from "@lucide/svelte";
+  import { Download, FolderPlus, Layers, Plus, Search } from "@lucide/svelte";
   import { onMount } from "svelte";
   import IconButton from "$lib/ui/IconButton.svelte";
   import { sortable, type SortState } from "$lib/ui/sortable";
@@ -20,6 +20,7 @@
   import FolderHead from "./FolderHead.svelte";
   import RepoCard from "./RepoCard.svelte";
   import { settings } from "$lib/stores/settings.svelte";
+  import { dialogs } from "$lib/stores/dialogs.svelte";
   import { scanResults } from "$lib/stores/scanResults.svelte";
   import { repoSelection } from "$lib/stores/repoSelection.svelte";
   import { repoActions } from "$lib/services/repoActions.svelte";
@@ -188,6 +189,7 @@
         <span class="t-section" use:tooltip={t.sidebar.foldersTip}>{t.sidebar.folders}</span>
         <span class="flex items-center gap-1">
           <SectionTools anyOpen={anyRootOpen} onfold={foldAllRoots} anySelected={sidebarSelection.items.length > 0} onselect={(all) => sidebarSelection.apply(all ? { kind: "set", ids: folderPaths(), mode: "only" } : { kind: "none" })} />
+          <IconButton icon={Download} size="sm" class="!size-6" label={t.clone.open} hint={t.clone.openTip} onclick={() => (dialogs.cloneOpen = { parent: null })} />
           <IconButton icon={Plus} size="sm" class="!size-6" label={t.sidebar.addRoot} hint={t.sidebar.addRootTip} onclick={pickRoots} />
         </span>
       </div>

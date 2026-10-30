@@ -204,6 +204,7 @@
 {#if dialogs.deletedOpen}{#await import("$lib/components/DeletedDialog.svelte") then m}<m.default />{/await}{/if}
 {#if dialogs.commitSearchOpen}{#await import("$lib/components/CommitSearchDialog.svelte") then m}<m.default />{/await}{/if}
 {#if dialogs.shortcutsOpen}{#await import("$lib/components/ShortcutsDialog.svelte") then m}<m.default />{/await}{/if}
+{#if dialogs.cloneOpen}{#await import("$lib/components/CloneDialog.svelte") then m}<m.default />{/await}{/if}
 {#if dialogs.copiesFor}{#await import("$lib/components/CopiesDialog.svelte") then m}<m.default />{/await}{/if}
 {#if dialogs.ask}{#await import("$lib/components/AskDialog.svelte") then m}<m.default />{/await}{/if}
 {#if dialogs.commitsView}{#await import("$lib/components/CommitsFlyout.svelte") then m}<m.default />{/await}{/if}

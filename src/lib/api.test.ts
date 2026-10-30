@@ -16,7 +16,7 @@ describe("api", () => {
       ["checkoutDefault", ["r"]], ["gitLog", ["r", "HEAD", 0, 10, null]], ["commitDetail", ["r", "s"]], ["branchList", ["r"]],
       ["workingDiff", ["r", "f", "Staged", false]], ["commitDiff", ["r", "s", "f", true]], ["gitSwitch", ["r", "t", false, "Keep"]],
       ["gitCreateBranch", ["r", "n", null, true]], ["gitStage", ["r", ["a"]]], ["gitUnstage", ["r", ["a"]]], ["gitDiscard", ["r", ["a"], []]],
-      ["gitCommit", ["r", "m", false, false]], ["gitRemote", ["r", "Fetch", "id"]], ["gitCancel", ["id"]], ["openFolder", ["p"]],
+      ["gitCommit", ["r", "m", false, false]], ["gitRemote", ["r", "Fetch", "id"]], ["gitClone", ["u", "t", "id"]], ["gitCancel", ["id"]], ["openFolder", ["p"]],
       ["appInfo", []], ["openUrl", ["u"]], ["openTerminal", ["p"]], ["openGithubDesktop", ["p"]], ["runToolCommand", ["Git", "Install"]],
       ["deleteBranch", [{}]], ["deleteRemoteBranches", [[]]], ["serverHeads", [["p"]]], ["fetchRepo", ["p"]], ["watchRepos", [["p"]]],
       ["freeCopyFolders", ["r", "agent", 2]], ["checkCopyTargets", ["r", "Worktree", []]], ["createWorkingCopies", ["r", "Clone", "main", [], "id"]],

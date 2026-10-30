@@ -114,6 +114,8 @@ export const api = {
     invoke<OpResult>("git_commit", { path, message, amend, allowPushed }),
   /** `branch` for a push of a branch that is not checked out. */
   gitRemote: (path: string, op: GitOp, id: string, branch: string | null = null) => invoke<OpResult>("git_remote", { path, op, id, branch }),
+  /** `target` is the new folder; it is removed again when the clone fails or is stopped. A sign-in may ask. */
+  gitClone: (url: string, target: string, id: string) => invoke<OpResult>("git_clone", { url, target, id }),
   gitCancel: (id: string) => invoke<void>("git_cancel", { id }),
   freeCopyFolders: (path: string, label: string, count: number) => invoke<string[]>("free_copy_folders", { path, label, count }),
   checkCopyTargets: (path: string, kind: CopyKind, targets: CopyTarget[]) => invoke<TargetCheck[]>("check_copy_targets", { path, kind, targets }),

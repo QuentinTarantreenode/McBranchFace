@@ -1,5 +1,5 @@
 // Menus of the sidebar's folders. They load on the first open: nothing here is needed to show the list.
-import { Boxes, Copy, FolderMinus, FolderOpen, FolderPlus, Palette, SlidersHorizontal, SquareTerminal } from "@lucide/svelte";
+import { Boxes, Copy, Download, FolderMinus, FolderOpen, FolderPlus, Palette, SlidersHorizontal, SquareTerminal } from "@lucide/svelte";
 import { newGroupId, withGroup } from "$lib/repoGroups";
 import { api } from "$lib/api";
 import type { RepoEntry } from "$lib/stores/scanResults.svelte";
@@ -48,6 +48,7 @@ export function folderMenu(ctx: SidebarMenuContext, g: SidebarGroup<RepoEntry>, 
       disabled: g.repos.length ? undefined : t.repoGroups.nothing,
       run: () => repoActions.setRepoGroups(withGroup(settings.config?.repoGroups ?? [], { id: newGroupId(), name, paths: g.repos.map((r) => r.info.path) }), t.repoGroups.created(name)),
     },
+    ...(real ? [{ label: t.clone.menu, icon: Download, hint: t.clone.menuTip, run: () => (dialogs.cloneOpen = { parent: g.root }) }] : []),
     { label: t.sidebar.addRoot, icon: FolderPlus, run: ctx.pickRoots },
     { label: t.sidebar.manageRoots, icon: SlidersHorizontal, run: () => dialogs.openSettings("repos") },
     ...(real ? ["sep" as const, { label: t.sidebar.removeRootMenu, icon: FolderMinus, danger: true, run: () => repoActions.removeRoot(g.root) }] : []),
