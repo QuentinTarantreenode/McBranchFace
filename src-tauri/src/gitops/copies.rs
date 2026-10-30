@@ -236,7 +236,7 @@ const LONG_PATHS: [&str; 2] = ["-c", "core.longpaths=true"];
 pub async fn remove_worktree(source: &Git, path: &str, force: bool, journal: &Journal) -> Op<OpResult> {
     let op = GitOp::RemoveWorktree;
     let listed = checked_out_paths(source).await;
-    if !listed.iter().any(|p| same_path(p, path)) {
+    if !listed.iter().any(|p| same_folder(p, path)) {
         return Err(fail(op, FailureKind::NoLongerCandidate, format!("{path} is not a linked worktree of this repository")));
     }
     check_removable(source, op, Path::new(path)).await?;
@@ -465,6 +465,16 @@ pub async fn restore_worktree(source: &Git, original: &str, moved: &Path, branch
         let _ = wt.raw(&["apply", "--cached", "--binary", &patch.to_string_lossy()]).await;
     }
     Ok(())
+}
+
+/// Whether two spellings name the same folder. git lists the long form of a path, while the app may hold
+/// the 8.3 short form (`RUNNER~1` on CI runners): the text differs, the folder does not. Resolved where
+/// both exist; otherwise the text decides.
+fn same_folder(a: &str, b: &str) -> bool {
+    match (std::fs::canonicalize(a), std::fs::canonicalize(b)) {
+        (Ok(x), Ok(y)) => same_path(&x.to_string_lossy(), &y.to_string_lossy()),
+        _ => same_path(a, b),
+    }
 }
 
 async fn checked_out_paths(git: &Git) -> Vec<String> {
