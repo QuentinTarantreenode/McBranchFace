@@ -1010,6 +1010,8 @@ mod tests {
         assert_eq!(c.roots, vec!["C:/a".to_string()]);
     }
 
+    // Windows spelling: case and separator do not make a different folder there, but do on other systems.
+    #[cfg(windows)]
     #[test]
     fn repo_groups_keep_one_entry_per_id_and_folder() {
         let mut c = Config::default();
@@ -1056,6 +1058,7 @@ mod tests {
         assert_eq!(c.ui.dialog_sizes.len(), 16);
     }
 
+    #[cfg(windows)]
     #[test]
     fn a_root_listed_twice_anywhere_is_kept_once_in_its_first_place() {
         // Windows paths: case and separator do not make a different folder.

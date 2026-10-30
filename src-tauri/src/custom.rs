@@ -462,7 +462,7 @@ mod tests {
         if cfg!(windows) {
             assert!(line.ends_with("-File \"C:/data/commands/r 1.ps1\""), "{line}");
         } else {
-            assert!(line.ends_with("-File 'C:/data/commands/r 1.ps1'"), "{line}");
+            assert!(line.ends_with("'-File' 'C:/data/commands/r 1.ps1'"), "{line}");
         }
         assert_eq!(invocation(Shell::Cmd, Path::new("x.cmd")), ("cmd".to_string(), vec!["/d".into(), "/c".into(), "x.cmd".into()]));
         assert_eq!(invocation(Shell::Bash, Path::new("x.sh")).0, "bash");

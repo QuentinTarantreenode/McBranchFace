@@ -464,6 +464,8 @@ mod tests {
         assert!(assesses_online("C:\\ws\\a\\", "id", &[], copies, None), "however the path is spelled");
     }
 
+    // The held copy is named in another spelling (case, separators): the same folder only on Windows.
+    #[cfg(windows)]
     #[test]
     fn the_copy_that_holds_the_server_branches_keeps_them_while_it_is_reachable() {
         let copies = ["C:/ws/b", "C:/ws/a-agent-1", "C:/ws/a"];

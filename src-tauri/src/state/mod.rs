@@ -194,6 +194,8 @@ pub(crate) fn under_roots(path: &str, roots: &[String]) -> bool {
 mod tests {
     use super::*;
 
+    // Case and separators are spelling only on Windows.
+    #[cfg(windows)]
     #[test]
     fn cached_statuses_belong_to_the_folders_however_they_are_spelled() {
         let roots = vec!["C:\\ws\\Acme26".to_string()];
