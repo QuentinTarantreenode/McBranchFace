@@ -378,10 +378,31 @@ impl Window {
     }
 }
 
+/// The repo's folders as the OS reports them. macOS lists the temp folder under /var, a link to
+/// /private/var, and its events come with the resolved path: a folder spelled differently is never matched.
+fn resolved(repo: WatchedRepo) -> WatchedRepo {
+    let real = |p: &PathBuf| std::fs::canonicalize(p).map(|c| strip_verbatim(&c)).unwrap_or_else(|_| p.clone());
+    WatchedRepo {
+        path: real(&repo.path),
+        git_dir: real(&repo.git_dir),
+        worktrees: repo.worktrees.iter().map(real).collect(),
+    }
+}
+
+/// Windows writes resolved paths with the `\\?\` prefix, which no other spelling of the folder has.
+fn strip_verbatim(p: &Path) -> PathBuf {
+    let s = p.to_string_lossy();
+    match s.strip_prefix(r"\\?\") {
+        Some(rest) => PathBuf::from(rest),
+        None => p.to_path_buf(),
+    }
+}
+
 /// Watches the repos; a folder that cannot be watched is skipped and named in `failed`, the others are
 /// watched all the same. An error only when the watcher itself cannot start. Events of one window of
 /// `DEBOUNCE` are handed on together; the thread ends with the watcher.
 pub fn watch(repos: Vec<WatchedRepo>, emit: impl Fn(RepoChanged) + Send + 'static) -> Result<RepoWatcher> {
+    let repos: Vec<WatchedRepo> = repos.into_iter().map(resolved).collect();
     let plan = watch_plan(&repos);
     let targets = Targets::of(&repos, &plan);
     let (tx, rx) = mpsc::channel::<notify::Result<Event>>();

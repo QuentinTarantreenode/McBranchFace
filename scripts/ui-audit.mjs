@@ -370,6 +370,9 @@ const count = (kind, n = 1) => {
 // focus, and on a second click on what opened it.
 async function popoverChecks({ js }) {
   const open = (sel) => `!!document.querySelector(${JSON.stringify(sel)})`;
+  // Waits until the popover is open (or shut) and not a fixed pause: a slow runner opens it later than 400 ms.
+  const settle = (sel, want) =>
+    `await new Promise((r) => { const t0 = Date.now(); const tick = () => { if (${open(sel)} === ${want} || Date.now() - t0 > 3000) r(); else setTimeout(tick, 20); }; tick(); });`;
   const cases = [
     { name: "quick-switch", sel: "[data-quick-switch]", open: quick, trigger: "nav button[aria-haspopup=dialog]" },
     { name: "row-menu", sel: "[role=menu]", open: ctx("[data-key][role=option]") },
@@ -383,7 +386,7 @@ async function popoverChecks({ js }) {
   for (const c of cases) {
     const all = c.trigger ? { ...ways, toggle: `const t = document.querySelector(${JSON.stringify(c.trigger)}); t.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true })); t.click();` } : ways;
     for (const [way, close] of Object.entries(all)) {
-      const state = await js(`${clean} ${wait(300)} ${c.open} ${wait(400)} const before = ${open(c.sel)}; ${close} ${wait(300)} return { before, after: ${open(c.sel)} };`);
+      const state = await js(`${clean} ${wait(300)} ${c.open} ${settle(c.sel, true)} const before = ${open(c.sel)}; ${close} ${settle(c.sel, false)} return { before, after: ${open(c.sel)} };`);
       count("popover");
       if (!state.before || state.after) findings.push({ theme: "-", view: `popover-${c.name}`, width: 1280, kind: "popover", finding: { way, ...state } });
     }
