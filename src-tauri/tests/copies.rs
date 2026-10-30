@@ -163,6 +163,7 @@ async fn copy_targets_must_be_absolute_and_start_points_real_commits() {
     assert!(!base(&f).join("work-opt").exists());
 }
 
+#[cfg(windows)]
 fn files_in(dir: &std::path::Path) -> Vec<std::ffi::OsString> {
     let mut names: Vec<_> = std::fs::read_dir(dir).unwrap().flatten().map(|e| e.file_name()).collect();
     names.sort();
