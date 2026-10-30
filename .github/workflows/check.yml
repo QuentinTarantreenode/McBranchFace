@@ -55,6 +55,11 @@ jobs:
         if: runner.os == 'Linux'
         run: node scripts/verify.mjs --only versions,types,lint,knip,vitest,clippy,rust-tests,bindings,build,bundle-hooks,audit
 
+      # The performance run reads the audit build; the UI audit that normally makes it is skipped here.
+      - name: Audit build for the performance run
+        if: runner.os == 'Linux'
+        run: npx vite build --mode audit
+
       - name: Render performance of a large scan
         if: runner.os == 'Linux'
         run: node scripts/perf-scan.mjs
