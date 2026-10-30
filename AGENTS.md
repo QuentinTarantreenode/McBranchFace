@@ -1,7 +1,7 @@
 # AGENTS.md
 
-Guide for coding agents and contributors. [README.md](README.md) describes what the app does and every gate in
-detail. This file describes how to work on it: where things live, the rules the code follows, and when a change is
+Guide for coding agents and contributors. [README.md](README.md) says what the app is, and [docs/](docs/) describes what it does and
+every gate in detail ([docs/development.md](docs/development.md)). This file describes how to work on it: where things live, the rules the code follows, and when a change is
 done.
 
 McBranchFace is a desktop git tool for many repositories, working copies and agent worktrees. It has two
@@ -112,7 +112,7 @@ budgets, writes the CHANGELOG section, commits and tags.
 
 - **Test hook:** in dev, audit and e2e builds, `window.__mbfTest` has `idle()`, `busy()`, `when(cond, ms)`, `events`
   (toasts and command outcomes), `report()`, `tick(...)` and `reset(...)`. Wait on `when(...)` or `idle()`, never on
-  fixed sleeps. Details are in the README section *Tests*.
+  fixed sleeps. Details are in the *Tests* section of [docs/development.md](docs/development.md).
 - **CDP:** start the dev app with `WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS=--remote-debugging-port=9333` to use the
   audit scripts against it.
 - **Headless scan:** `cd src-tauri && cargo run --example scan -- <root> [--fetch] [--online] [--json]` runs the real
