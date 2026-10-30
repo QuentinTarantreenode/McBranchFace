@@ -1,18 +1,38 @@
 # Builds one artifact set per operating system; every platform only contains its own binaries.
-# scripts/release.mjs creates the tag after all gates and the Windows build passed locally. Started by hand
-# until a first run on GitHub is green: macOS and Linux have never built this app. Then add
-# `push: tags: ["v*"]` as a trigger.
-# Actions are pinned to commits.
+# scripts/release.mjs creates the tag after all gates and the Windows build passed locally. A pushed `v*` tag
+# builds every platform and attaches the installers to a draft release, which is published by hand after a look.
+# Started by hand (Actions → Run workflow) it only builds and keeps the installers as run artifacts.
+# Actions are pinned to commits; the release is made with the gh CLI that the runners carry.
 name: release
 
 on:
+  push:
+    tags: ["v*"]
   workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
+  create-release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - name: Draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >
+          gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --draft --verify-tag
+          --title "McBranchFace ${GITHUB_REF_NAME#v}" --notes "See CHANGELOG.md for what changed."
+
   build:
+    needs: create-release
+    # A manual run has no release to wait for: the job is skipped there, and this still lets the build go on.
+    if: ${{ !cancelled() && (needs.create-release.result == 'success' || needs.create-release.result == 'skipped') }}
+    permissions:
+      contents: write
     strategy:
       fail-fast: false
       matrix:
@@ -90,3 +110,12 @@ jobs:
             src-tauri/target/**/release/bundle/appimage/*.AppImage
             src-tauri/target/**/release/bundle/deb/*.deb
           if-no-files-found: error
+
+      - name: Attach to the draft release
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          find src-tauri/target -path '*release/bundle/*' -type f \( -name '*.exe' -o -name '*.msi' -o -name '*.dmg' -o -name '*.AppImage' -o -name '*.deb' \) -print0 \
+            | xargs -0 gh release upload "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --clobber
