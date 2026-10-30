@@ -1,0 +1,65 @@
+# Runs verify.mjs on Windows and Ubuntu. Started by hand until a first run on GitHub is green: Ubuntu has
+# never built this app. Then add `push: branches: [main]` and `pull_request:` as triggers. The local gates
+# (verify.mjs, the pre-push hook, release.mjs) stay the real ones.
+# Actions are pinned to commits: a moved tag cannot change what runs here.
+name: check
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [windows-latest, ubuntu-22.04]
+    name: check (${{ matrix.runner }})
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      # Toolchain and components as rust-toolchain.toml names them.
+      - name: Rust toolchain
+        run: rustup toolchain install
+
+      - uses: swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          workspaces: src-tauri -> target
+
+      - name: Linux system libraries (WebKitGTK)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+
+      - run: npm ci
+
+      # Versions, types, lint, unused code, frontend and Rust tests, clippy, bindings drift, build with
+      # start-bytes budget, test hooks in the bundle, the headless UI audit and dependency advisories.
+      # Google Chrome ships with the runner images; the Rust tests bring their own git config.
+      - name: All gates
+        run: node scripts/verify.mjs
+
+      - name: Render performance of a large scan
+        if: runner.os == 'Linux'
+        run: node scripts/perf-scan.mjs
+
+      - name: Screenshots of the UI audit
+        if: failure() && runner.os == 'Linux'
+        continue-on-error: true
+        run: node scripts/ui-audit.mjs --shots audit-shots
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: failure() && runner.os == 'Linux'
+        with:
+          name: ui-audit-shots
+          path: audit-shots/
+          if-no-files-found: ignore

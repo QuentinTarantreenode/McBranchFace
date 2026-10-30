@@ -1,0 +1,13 @@
+# The only git config the Rust tests see (with GIT_CONFIG_NOSYSTEM, see src/test_env.rs): line
+# endings, the default branch and the identity of a developer machine must not change the results.
+[user]
+	name = Dev
+	email = dev@example.com
+[init]
+	defaultBranch = main
+[core]
+	autocrlf = false
+[commit]
+	gpgsign = false
+[tag]
+	gpgsign = false

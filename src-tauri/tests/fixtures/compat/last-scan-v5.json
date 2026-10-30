@@ -1,0 +1,450 @@
+{
+  "scannedAt": 1760000000,
+  "results": [
+    {
+      "branches": [
+        {
+          "authors": [
+            "dev@example.com"
+          ],
+          "behind": 0,
+          "checks": [
+            {
+              "code": {
+                "code": "NoMergeEvidence",
+                "p": {
+                  "base": "refs/remotes/origin/main",
+                  "own": 4
+                }
+              },
+              "kind": "Merged",
+              "outcome": "Warn"
+            },
+            {
+              "code": {
+                "code": "CommitsAfterPush",
+                "p": {
+                  "count": 1,
+                  "merged": false,
+                  "upstream": "refs/remotes/origin/feature/active/a0"
+                }
+              },
+              "kind": "Pushed",
+              "outcome": "Fail"
+            },
+            {
+              "code": {
+                "code": "NotCheckedOut"
+              },
+              "kind": "Worktree",
+              "outcome": "Pass"
+            },
+            {
+              "code": {
+                "code": "NoStashes"
+              },
+              "kind": "Stashes",
+              "outcome": "Pass"
+            }
+          ],
+          "ignored": false,
+          "isMine": false,
+          "lastCommitAt": 1755485720,
+          "lastCommitAuthor": "dev@example.com",
+          "lastCommitSubject": "local commit after push",
+          "locked": false,
+          "mergeEvidence": null,
+          "name": "feature/active/a0",
+          "ownCommitCount": 4,
+          "ownCommits": [
+            {
+              "authorEmail": "dev@example.com",
+              "authoredAt": 1755485720,
+              "sha": "236f09acc0e55738d9ce120057e28e8ce1ce433d",
+              "subject": "local commit after push"
+            },
+            {
+              "authorEmail": "dev@example.com",
+              "authoredAt": 1789913600,
+              "sha": "37a0af90001a1c139719e85922502539de653c4f",
+              "subject": "feature/active/a0: change 2"
+            },
+            {
+              "authorEmail": "dev@example.com",
+              "authoredAt": 1789913600,
+              "sha": "4ad534a134c8d9353e7829289cbede4ae6b8ebf6",
+              "subject": "feature/active/a0: change 1"
+            },
+            {
+              "authorEmail": "dev@example.com",
+              "authoredAt": 1789913600,
+              "sha": "32dcbf51d19b013b4a299c8c62f582b4f7d6624c",
+              "subject": "feature/active/a0: change 0"
+            }
+          ],
+          "pullRequest": null,
+          "pushState": {
+            "sha": "37a0af90001a1c139719e85922502539de653c4f",
+            "source": "Snapshot"
+          },
+          "remoteRef": "refs/heads/feature/active/a0",
+          "repoPath": "C:/dev/workspace/r0",
+          "sha": "236f09acc0e55738d9ce120057e28e8ce1ce433d",
+          "stashes": [],
+          "unpushedCommitCount": 1,
+          "unpushedCommits": [
+            {
+              "authorEmail": "dev@example.com",
+              "authoredAt": 1755485720,
+              "sha": "236f09acc0e55738d9ce120057e28e8ce1ce433d",
+              "subject": "local commit after push"
+            }
+          ],
+          "upstream": "refs/remotes/origin/feature/active/a0",
+          "upstreamState": "Live",
+          "verdict": "Unsafe",
+          "worktree": null
+        },
+        {
+          "authors": [
+            "dev@example.com"
+          ],
+          "behind": 0,
+          "checks": [
+            {
+              "code": {
+                "code": "Merged",
+                "p": {
+                  "kind": "Ancestor",
+                  "target": "refs/remotes/origin/main"
+                }
+              },
+              "kind": "Merged",
+              "outcome": "Pass"
+            },
+            {
+              "code": {
+                "code": "AllPushed",
+                "p": {
+                  "sha": "9e59d6a2539822b5a12ba33ee4a334cdfff69c9e",
+                  "source": "Snapshot",
+                  "upstream": "refs/remotes/origin/feature/merged/m2"
+                }
+              },
+              "kind": "Pushed",
+              "outcome": "Pass"
+            },
+            {
+              "code": {
+                "code": "NotCheckedOut"
+              },
+              "kind": "Worktree",
+              "outcome": "Pass"
+            },
+            {
+              "code": {
+                "code": "NoStashes"
+              },
+              "kind": "Stashes",
+              "outcome": "Pass"
+            }
+          ],
+          "ignored": false,
+          "isMine": false,
+          "lastCommitAt": 1755446240,
+          "lastCommitAuthor": "dev@example.com",
+          "lastCommitSubject": "feature/merged/m2: change 1",
+          "locked": false,
+          "mergeEvidence": {
+            "kind": "Ancestor",
+            "target": "refs/remotes/origin/main"
+          },
+          "name": "feature/merged/m2",
+          "ownCommitCount": 0,
+          "ownCommits": [],
+          "pullRequest": null,
+          "pushState": {
+            "sha": "9e59d6a2539822b5a12ba33ee4a334cdfff69c9e",
+            "source": "Snapshot"
+          },
+          "remoteRef": "refs/heads/feature/merged/m2",
+          "repoPath": "C:/dev/workspace/r0",
+          "sha": "9e59d6a2539822b5a12ba33ee4a334cdfff69c9e",
+          "stashes": [],
+          "unpushedCommitCount": 0,
+          "unpushedCommits": [],
+          "upstream": "refs/remotes/origin/feature/merged/m2",
+          "upstreamState": "Live",
+          "verdict": "Safe",
+          "worktree": null
+        },
+        {
+          "authors": [
+            "dev@example.com"
+          ],
+          "behind": 0,
+          "checks": [
+            {
+              "code": {
+                "code": "Merged",
+                "p": {
+                  "kind": "Squash",
+                  "target": "refs/remotes/origin/main"
+                }
+              },
+              "kind": "Merged",
+              "outcome": "Pass"
+            },
+            {
+              "code": {
+                "code": "PushUnknown"
+              },
+              "kind": "Pushed",
+              "outcome": "Info"
+            },
+            {
+              "code": {
+                "code": "NotCheckedOut"
+              },
+              "kind": "Worktree",
+              "outcome": "Pass"
+            },
+            {
+              "code": {
+                "code": "NoStashes"
+              },
+              "kind": "Stashes",
+              "outcome": "Pass"
+            }
+          ],
+          "ignored": false,
+          "isMine": false,
+          "lastCommitAt": 1755448160,
+          "lastCommitAuthor": "dev@example.com",
+          "lastCommitSubject": "feature/squash/s0: change 1",
+          "locked": false,
+          "mergeEvidence": {
+            "kind": "Squash",
+            "target": "refs/remotes/origin/main"
+          },
+          "name": "feature/squash/s0",
+          "ownCommitCount": 2,
+          "ownCommits": [
+            {
+              "authorEmail": "dev@example.com",
+              "authoredAt": 1755448160,
+              "sha": "cac36223ebc04d045fe883b99d08b480d7062936",
+              "subject": "feature/squash/s0: change 1"
+            },
+            {
+              "authorEmail": "dev@example.com",
+              "authoredAt": 1755448040,
+              "sha": "978726d1493b013a49f1fc4b8e3451e6545463af",
+              "subject": "feature/squash/s0: change 0"
+            }
+          ],
+          "pullRequest": null,
+          "pushState": null,
+          "remoteRef": "refs/heads/feature/squash/s0",
+          "repoPath": "C:/dev/workspace/r0",
+          "sha": "cac36223ebc04d045fe883b99d08b480d7062936",
+          "stashes": [],
+          "unpushedCommitCount": 0,
+          "unpushedCommits": [],
+          "upstream": "refs/remotes/origin/feature/squash/s0",
+          "upstreamState": "Gone",
+          "verdict": "Safe",
+          "worktree": null
+        },
+        {
+          "authors": [
+            "dev@example.com"
+          ],
+          "behind": 0,
+          "checks": [
+            {
+              "code": {
+                "code": "NoMergeEvidence",
+                "p": {
+                  "base": "refs/remotes/origin/main",
+                  "own": 2
+                }
+              },
+              "kind": "Merged",
+              "outcome": "Warn"
+            },
+            {
+              "code": {
+                "code": "NeverPushed",
+                "p": {
+                  "count": 2,
+                  "merged": false
+                }
+              },
+              "kind": "Pushed",
+              "outcome": "Fail"
+            },
+            {
+              "code": {
+                "code": "NotCheckedOut"
+              },
+              "kind": "Worktree",
+              "outcome": "Pass"
+            },
+            {
+              "code": {
+                "code": "Stashes",
+                "p": {
+                  "count": 1
+                }
+              },
+              "kind": "Stashes",
+              "outcome": "Fail"
+            }
+          ],
+          "ignored": false,
+          "isMine": false,
+          "lastCommitAt": 1755486020,
+          "lastCommitAuthor": "dev@example.com",
+          "lastCommitSubject": "wip two",
+          "locked": false,
+          "mergeEvidence": null,
+          "name": "local/wip1",
+          "ownCommitCount": 2,
+          "ownCommits": [
+            {
+              "authorEmail": "dev@example.com",
+              "authoredAt": 1755486020,
+              "sha": "249016b9331bbbfe58907e146d38bcbb92f9f8b1",
+              "subject": "wip two"
+            },
+            {
+              "authorEmail": "dev@example.com",
+              "authoredAt": 1755485900,
+              "sha": "68f72860d82ab316be0adae47fe93bac92ae30cd",
+              "subject": "wip one"
+            }
+          ],
+          "pullRequest": null,
+          "pushState": null,
+          "remoteRef": "refs/heads/local/wip1",
+          "repoPath": "C:/dev/workspace/r0",
+          "sha": "249016b9331bbbfe58907e146d38bcbb92f9f8b1",
+          "stashes": [
+            {
+              "message": "WIP on local/wip1: 249016b wip two",
+              "selector": "stash@{0}",
+              "sha": "6db38aac7d25e1e02a8803ecfe8b316b644e735a"
+            }
+          ],
+          "unpushedCommitCount": 2,
+          "unpushedCommits": [
+            {
+              "authorEmail": "dev@example.com",
+              "authoredAt": 1755486020,
+              "sha": "249016b9331bbbfe58907e146d38bcbb92f9f8b1",
+              "subject": "wip two"
+            },
+            {
+              "authorEmail": "dev@example.com",
+              "authoredAt": 1755485900,
+              "sha": "68f72860d82ab316be0adae47fe93bac92ae30cd",
+              "subject": "wip one"
+            }
+          ],
+          "upstream": "",
+          "upstreamState": "None",
+          "verdict": "Unsafe",
+          "worktree": null
+        }
+      ],
+      "durationMs": 181,
+      "error": null,
+      "errorKind": null,
+      "fetchError": null,
+      "fetchErrorKind": null,
+      "fetched": false,
+      "localBranchCount": 4,
+      "online": [
+        {
+          "ignored": false,
+          "isMine": false,
+          "lastCommitAt": 1789913600,
+          "lastCommitAuthor": "dev@example.com",
+          "lastCommitSubject": "feature/active/a0: change 2",
+          "locked": false,
+          "mergeEvidence": null,
+          "merged": false,
+          "name": "feature/active/a0",
+          "openPr": false,
+          "ownCommitCount": 3,
+          "pullRequest": null,
+          "remote": "origin",
+          "repoPath": "C:/dev/workspace/r0",
+          "sha": "37a0af90001a1c139719e85922502539de653c4f",
+          "verdict": "Inactive"
+        },
+        {
+          "ignored": false,
+          "isMine": false,
+          "lastCommitAt": 1789913600,
+          "lastCommitAuthor": "dev@example.com",
+          "lastCommitSubject": "feature/active/a1: change 2",
+          "locked": false,
+          "mergeEvidence": null,
+          "merged": false,
+          "name": "feature/active/a1",
+          "openPr": false,
+          "ownCommitCount": 3,
+          "pullRequest": null,
+          "remote": "origin",
+          "repoPath": "C:/dev/workspace/r0",
+          "sha": "c862137bd44d6d569b2ff77d7288ba7fc434ed25",
+          "verdict": "Inactive"
+        }
+      ],
+      "onlineAt": 1793313874,
+      "onlineFetched": false,
+      "repo": {
+        "defaultBranch": "origin/main",
+        "identity": "C:/dev/servers/r0",
+        "links": null,
+        "name": "r0",
+        "path": "C:/dev/workspace/r0",
+        "provider": "None",
+        "remoteUrl": "C:/dev/servers/r0.git",
+        "root": "C:/dev/workspace"
+      },
+      "tracking": [
+        {
+          "ahead": 1,
+          "behind": 0,
+          "branch": "feature/active/a0",
+          "checkedOut": false,
+          "gone": false,
+          "remote": "origin",
+          "remoteBranch": "feature/active/a0"
+        },
+        {
+          "ahead": 0,
+          "behind": 0,
+          "branch": "feature/merged/m2",
+          "checkedOut": false,
+          "gone": false,
+          "remote": "origin",
+          "remoteBranch": "feature/merged/m2"
+        },
+        {
+          "ahead": 0,
+          "behind": 0,
+          "branch": "feature/squash/s0",
+          "checkedOut": false,
+          "gone": true,
+          "remote": "origin",
+          "remoteBranch": "feature/squash/s0"
+        }
+      ],
+      "warnings": []
+    }
+  ]
+}

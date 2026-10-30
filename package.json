@@ -1,0 +1,61 @@
+{
+  "name": "mcbranchface",
+  "version": "1.3.0",
+  "description": "A Git client for many repos, worktrees and agents, with safe branch cleanup",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "test": "vitest run",
+    "tauri": "tauri",
+    "coverage": "vitest run --coverage",
+    "e2e": "node scripts/e2e.mjs",
+    "demo": "node scripts/demo.mjs",
+    "lint": "eslint .",
+    "knip": "knip --no-progress",
+    "budgets": "node scripts/budgets.mjs",
+    "audit": "vite build --mode audit && node scripts/ui-audit.mjs",
+    "perf": "vite build --mode audit && node scripts/perf-scan.mjs && node scripts/perf-start.mjs",
+    "verify": "node scripts/verify.mjs",
+    "verify:quick": "node scripts/verify.mjs --quick",
+    "hooks": "git config core.hooksPath .githooks",
+    "release": "node scripts/release.mjs",
+    "mutants": "cargo mutants --dir src-tauri --file src/delete*.rs --file src/actions.rs --file src/gitops/ops.rs --file src/gitops/copies.rs --file src/assess*.rs"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@lucide/svelte": "^1.48.0",
+    "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-dialog": "^2.7.3",
+    "@tauri-apps/plugin-notification": "^2.4.0",
+    "highlight.js": "^11.12.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@sveltejs/vite-plugin-svelte": "^7.1.2",
+    "@tailwindcss/vite": "^4.3.3",
+    "@tauri-apps/cli": "^2",
+    "@testing-library/svelte": "^5.4.2",
+    "@vitest/coverage-v8": "^5.0.2",
+    "eslint": "^10.11.0",
+    "eslint-plugin-svelte": "^3.23.0",
+    "fast-check": "^4.10.2",
+    "globals": "^17.12.0",
+    "jsdom": "^30.1.1",
+    "knip": "^6.38.0",
+    "sharp": "^0.35.4",
+    "svelte": "^5.56.3",
+    "svelte-check": "^4.6.0",
+    "svelte-eslint-parser": "^1.8.1",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.70.1",
+    "vite": "^8.0.16",
+    "vitest": "^5.0.1"
+  }
+}

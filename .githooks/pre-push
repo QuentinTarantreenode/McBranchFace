@@ -1,0 +1,4 @@
+#!/bin/sh
+# The quick gates before anything leaves this machine: version, types, lint, unused code, frontend and
+# Rust tests, bindings. Installed with `npm run hooks` (core.hooksPath).
+exec node scripts/verify.mjs --quick

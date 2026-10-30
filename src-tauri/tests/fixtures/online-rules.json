@@ -1,0 +1,12 @@
+[
+  { "merged": true, "openPr": true, "ageDays": 0, "staleDays": 30, "verdict": "Active", "why": "an open PR wins over evidence: deleting the branch would close it" },
+  { "merged": true, "openPr": false, "ageDays": 400, "staleDays": 30, "verdict": "Merged", "why": "evidence wins over age" },
+  { "merged": false, "openPr": true, "ageDays": 400, "staleDays": 30, "verdict": "Active", "why": "an open PR keeps an old branch" },
+  { "merged": false, "openPr": false, "ageDays": 31, "staleDays": 30, "verdict": "Inactive", "why": "older than the threshold" },
+  { "merged": false, "openPr": false, "ageDays": 30, "staleDays": 30, "verdict": "Active", "why": "the boundary is exclusive" },
+  { "merged": false, "openPr": false, "ageDays": 2, "staleDays": 30, "verdict": "Active", "why": "recent work" },
+  { "merged": false, "openPr": false, "ageDays": 45, "staleDays": 60, "verdict": "Active", "why": "a higher threshold re-classifies" },
+  { "merged": false, "openPr": null, "ageDays": 400, "staleDays": 30, "verdict": "Active", "why": "pull requests unknown: an old branch may still have an open PR, so age alone never makes it inactive" },
+  { "merged": false, "openPr": null, "ageDays": 2, "staleDays": 30, "verdict": "Active", "why": "pull requests unknown, recent work" },
+  { "merged": true, "openPr": null, "ageDays": 400, "staleDays": 30, "verdict": "Merged", "why": "evidence stands without the pull request list" }
+]

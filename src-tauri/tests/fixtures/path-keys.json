@@ -1,0 +1,11 @@
+[
+  { "input": "C:\\Projects\\Repo", "windows": "c:/projects/repo", "other": "C:/Projects/Repo" },
+  { "input": "C:/Projects/Repo/", "windows": "c:/projects/repo", "other": "C:/Projects/Repo" },
+  { "input": "c:\\projects\\repo\\\\", "windows": "c:/projects/repo", "other": "c:/projects/repo" },
+  { "input": "C:\\Ws\\Ä-Ü", "windows": "c:/ws/ä-ü", "other": "C:/Ws/Ä-Ü" },
+  { "input": "\\\\Server\\Share\\Repo", "windows": "//server/share/repo", "other": "//Server/Share/Repo" },
+  { "input": "/home/Me/repo/", "windows": "/home/me/repo", "other": "/home/Me/repo" },
+  { "input": "C:\\", "windows": "c:", "other": "C:" },
+  { "input": "relative\\Dir", "windows": "relative/dir", "other": "relative/Dir" },
+  { "input": "", "windows": "", "other": "" }
+]

@@ -1,0 +1,8 @@
+# LF in the repo and in every checkout, whatever core.autocrlf says: the tests and the partial
+# staging compare bytes, and a checkout with CRLF would differ from what CI sees.
+* text=auto eol=lf
+
+*.png binary
+*.webp binary
+*.ico binary
+*.icns binary

@@ -1,0 +1,1005 @@
+/* Only shipped sources: tests, scripts and docs would otherwise add classes nobody renders. */
+@import "tailwindcss" source(".");
+@source not "./**/*.test.ts";
+@source not "./test";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* The theme attribute is always set (config is the single source), so no prefers-color-scheme block. */
+:root {
+  --bg: #f4f5f9;
+  --panel: #ffffff;
+  --panel-2: #eef0f5;
+  --input: #ffffff;
+  --hover: #e7eaf2;
+  --line: #dde1ea;
+  --line-strong: #c3c9d6;
+  --fg: #151823;
+  --muted: #434a61;
+  --faint: #5b627a;
+  --accent: #5b3df5;
+  /* What is selected: a clear accent fill plus a frame (shape, not colour alone). */
+  --sel-bg: color-mix(in oklab, #5b3df5 14%, transparent);
+  --accent-fg: #ffffff;
+  --safe: #15803d;
+  /* Darker than amber-700: small text on hover and row backgrounds needs 4.5:1. */
+  --review: #955a06;
+  --unsafe: #c62834;
+  --blocked: #1a63c2;
+  /* Text on its own tint (a badge, a pill): darker than the colour itself, so it keeps 4.5:1 on the
+     tint over panel, zebra row and selected row alike. */
+  --safe-ink: #116631;
+  --review-ink: #804d05;
+  --unsafe-ink: #a8222c;
+  --blocked-ink: #1757ab;
+  --accent-ink: #5237dd;
+  --shadow: 0 1px 2px rgb(16 20 40 / 0.06), 0 8px 24px rgb(16 20 40 / 0.08);
+  /* Floating layers (branch picker, menus) open over cards of the same colour. In light a firm border
+     and a deeper shadow lift them; in dark a lighter surface does, since a shadow barely shows on dark. */
+  /* Raised within a group on any surface: the chosen chip of a segment control. */
+  --raised: #ffffff;
+  --popover: #ffffff;
+  --popover-line: #c3c9d6;
+  --popover-2: #eef0f5;
+  --popover-hover: #e7eaf2;
+  --popover-shadow: 0 2px 6px rgb(16 20 40 / 0.1), 0 16px 40px rgb(16 20 40 / 0.18);
+  /* Corner highlight of large surfaces: silver in light, blue in dark. */
+  --glow: rgb(148 163 184 / 0.22);
+  /* Every second table row: a shallow step from --panel, still clearly weaker than hover. */
+  --row-alt: #f5f7fa;
+  /* Sidebar group headers: darker than the repo cards in light, lighter in dark, so they read as headers. */
+  --group-bg: #e1e5ee;
+  --group-line: #cad0dc;
+  /* Light theme, light tooltip: a raised panel, set off by border and shadow instead of a dark fill. */
+  --tooltip-bg: #ffffff;
+  --tooltip-fg: #151823;
+  --tooltip-muted: #4a5169;
+  --tooltip-line: #e3e6ee;
+  --tooltip-border: #c3c9d6;
+  /* Head band and cards: shallow steps from the tooltip surface. */
+  --tooltip-head: #f3f5f9;
+  --tooltip-card: #f5f6f9;
+  --tooltip-shadow: 0 2px 4px rgb(16 20 40 / 0.06), 0 10px 28px rgb(16 20 40 / 0.16);
+  /* Branch segments (powerline): lead = remote and namespace, rest = the name after the prefix. */
+  --seg-lead-bg: #d5dae5;
+  --seg-lead-fg: #353c52;
+  --seg-rest-bg: #e3e7ef;
+  --seg-rest-fg: #151823;
+  --seg-on-color: #ffffff;
+  --seg-color-mix: 74%;
+  /* Working-copy colours of one repository identity; contrast-checked on --panel. */
+  --id-0: #2563eb;
+  --id-1: #db2777;
+  --id-2: #0d9488;
+  --id-3: #c2410c;
+  --id-4: #7c3aed;
+  --id-5: #0e7490;
+  --id-6: #4d7c0f;
+  --id-7: #a21caf;
+  --id-8: #b45309;
+  --id-9: #be123c;
+  --id-10: #15803d;
+  --id-11: #4338ca;
+  /* Diff: opaque, so contrast is measured on what is painted. The word mark is stronger than its
+     line, the gutter of a changed line stronger still: the eye finds the change, then the word. */
+  --diff-add-bg: #e6ffec;
+  --diff-add-word: #abf2bc;
+  --diff-add-gutter: #ccffd8;
+  --diff-del-bg: #ffebe9;
+  --diff-del-word: #ffcecb;
+  --diff-del-gutter: #ffd7d5;
+  --diff-hunk-bg: #ddf4ff;
+  --diff-hunk-fg: #1f5a99;
+  --diff-empty: #f3f4f7;
+  --diff-chosen: #5b3df5;
+  --syn-kw: #cf222e;
+  --syn-str: #0a3069;
+  --syn-num: #0550ae;
+  --syn-com: #57606a;
+  --syn-fn: #8250df;
+  --syn-type: #953800;
+  --syn-attr: #0550ae;
+  --syn-tag: #116329;
+  --syn-meta: #57606a;
+  --syn-var: #953800;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0b0d13;
+  --panel: #11141c;
+  --panel-2: #171b25;
+  --input: #0d1017;
+  --hover: #1d2231;
+  --line: #242a3a;
+  --line-strong: #353d52;
+  --fg: #e8eaf1;
+  --muted: #b3b9cb;
+  --faint: #8e95ab;
+  --accent: #8f73ff;
+  --sel-bg: color-mix(in oklab, #8f73ff 22%, transparent);
+  --accent-fg: #0b0d13;
+  --safe: #34d399;
+  --review: #fbbf24;
+  --unsafe: #f87171;
+  --blocked: #60a5fa;
+  --safe-ink: #34d399;
+  --review-ink: #fbbf24;
+  --unsafe-ink: #fa8585;
+  --blocked-ink: #6aabfa;
+  --accent-ink: #a996ff;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px rgb(0 0 0 / 0.4);
+  --raised: #232838;
+  --popover: #1a1e2a;
+  --popover-line: #3a4259;
+  --popover-2: #232838;
+  /* Faint hint text on the active item still reads 4.7:1 on this. */
+  --popover-hover: #252a39;
+  --popover-shadow: 0 0 0 1px rgb(0 0 0 / 0.5), 0 16px 40px rgb(0 0 0 / 0.6);
+  --glow: rgb(59 130 246 / 0.1);
+  --row-alt: #151923;
+  --group-bg: #1f2432;
+  --group-line: #2f3649;
+  --tooltip-bg: #232838;
+  --tooltip-fg: #eef0f6;
+  --tooltip-muted: #aab1c4;
+  --tooltip-line: #394056;
+  --tooltip-border: #394056;
+  --tooltip-head: #1c2130;
+  --tooltip-card: #2b3144;
+  --tooltip-shadow: 0 6px 20px rgb(0 0 0 / 0.4);
+  --seg-lead-bg: #262c3c;
+  --seg-lead-fg: #b3b9cb;
+  --seg-rest-bg: #2b3246;
+  --seg-rest-fg: #e8eaf1;
+  --seg-on-color: #0b0d13;
+  --seg-color-mix: 100%;
+  --id-0: #60a5fa;
+  --id-1: #f472b6;
+  --id-2: #2dd4bf;
+  --id-3: #fb923c;
+  --id-4: #a78bfa;
+  --id-5: #22d3ee;
+  --id-6: #a3e635;
+  --id-7: #e879f9;
+  --id-8: #fbbf24;
+  --id-9: #fb7185;
+  --id-10: #4ade80;
+  --id-11: #818cf8;
+  --diff-add-bg: #12261d;
+  --diff-add-word: #1f4d33;
+  --diff-add-gutter: #122e1f;
+  --diff-del-bg: #2b1619;
+  --diff-del-word: #5c2430;
+  --diff-del-gutter: #3d1d22;
+  --diff-hunk-bg: #152035;
+  --diff-hunk-fg: #9dbcff;
+  --diff-empty: #0e1118;
+  --diff-chosen: #8f73ff;
+  --syn-kw: #ff7b72;
+  --syn-str: #a5d6ff;
+  --syn-num: #79c0ff;
+  --syn-com: #8b949e;
+  --syn-fn: #d2a8ff;
+  --syn-type: #ffa657;
+  --syn-attr: #79c0ff;
+  --syn-tag: #7ee787;
+  --syn-meta: #8b949e;
+  --syn-var: #ffa657;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-panel: var(--panel);
+  --color-panel-2: var(--panel-2);
+  --color-raised: var(--raised);
+  --color-input: var(--input);
+  --color-hover: var(--hover);
+  --color-row-alt: var(--row-alt);
+  --color-safe-ink: var(--safe-ink);
+  --color-review-ink: var(--review-ink);
+  --color-unsafe-ink: var(--unsafe-ink);
+  --color-blocked-ink: var(--blocked-ink);
+  --color-accent-ink: var(--accent-ink);
+  --color-group: var(--group-bg);
+  --color-group-line: var(--group-line);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --color-safe: var(--safe);
+  --color-review: var(--review);
+  --color-unsafe: var(--unsafe);
+  --color-blocked: var(--blocked);
+  --shadow-panel: var(--shadow);
+
+  /* System fonts: native look on every OS and nothing to download or embed. */
+  --font-sans: "Segoe UI Variable Text", "Segoe UI", -apple-system, BlinkMacSystemFont, system-ui, Ubuntu, sans-serif;
+  --font-mono: "Cascadia Mono", "Cascadia Code", "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+
+  /* Type scale — the only font sizes in the app. */
+  --text-xs: 11px;
+  --text-xs--line-height: 16px;
+  --text-sm: 12px;
+  --text-sm--line-height: 17px;
+  --text-base: 13px;
+  --text-base--line-height: 19px;
+  --text-lg: 15px;
+  --text-lg--line-height: 21px;
+  --text-xl: 20px;
+  --text-xl--line-height: 26px;
+}
+
+/* Base element styles live in the base layer, so utilities such as outline-none can override them. */
+@layer base {
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--accent) 35%, transparent);
+  }
+
+  .selectable {
+    user-select: text;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-strong) transparent;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+    border-radius: 6px;
+  }
+
+  dialog::backdrop {
+    background: rgb(5 6 10 / 0.55);
+    backdrop-filter: blur(3px);
+  }
+}
+
+/* ---- typography roles: pick a role, not a size ----------------------------------------------- */
+@utility t-title {
+  font-size: var(--text-lg);
+  line-height: var(--text-lg--line-height);
+  font-weight: 600;
+}
+@utility t-section {
+  font-size: var(--text-xs);
+  line-height: var(--text-xs--line-height);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+@utility t-meta {
+  font-size: var(--text-sm);
+  line-height: var(--text-sm--line-height);
+  color: var(--faint);
+}
+
+/* ---- surfaces ------------------------------------------------------------------------------ */
+/* A soft highlight running into the top-right corner; only on large surfaces. */
+/* Alternating rows for lists in DOM order; virtual lists alternate by index instead, since their
+   first DOM child changes while scrolling. Hover and selection utilities override it. */
+@utility zebra {
+  & > :nth-child(even) {
+    background-color: var(--row-alt);
+  }
+}
+
+@utility surface-glow {
+  background-image: radial-gradient(120% 90% at 100% 0%, var(--glow) 0%, transparent 60%);
+}
+
+/* ---- loading ------------------------------------------------------------------------------- */
+@keyframes pulse-bar {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(250%); }
+}
+
+.scan-bar {
+  animation: pulse-bar 1.2s ease-in-out infinite;
+}
+
+/* The light band moves by transform: the compositor runs it, no repaint per frame, however many
+   placeholders are on screen. Reduced motion ends it out of view: a calm surface. */
+@keyframes shimmer {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  /* Mixed from the text colour: as clearly there on a dark card as on a light one. */
+  background: color-mix(in oklab, var(--fg) 10%, transparent);
+  /* Every placeholder waits a moment before it shows: an answer within it never flashes a skeleton. */
+  opacity: 0;
+  animation: refresh-in 0.2s ease-out 0.15s forwards;
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--fg) 16%, transparent) 50%, transparent);
+  transform: translateX(-100%);
+  will-change: transform;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+/* Being refreshed: the content stays readable and usable, a quiet light band passes over it and a thin
+   accent line runs along its bottom edge. Both move by transform only. They fade in after a pause, so a
+   status that comes back at once shows nothing. */
+@keyframes refresh-in {
+  to { opacity: 1; }
+}
+.mbf-refreshing {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.mbf-refreshing::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--accent) 18%, transparent) 50%, transparent);
+  opacity: 0;
+  transform: translateX(-100%);
+  will-change: transform, opacity;
+  animation: shimmer 1.6s ease-in-out infinite, refresh-in 0.2s ease-out 0.25s forwards;
+}
+
+/* A card out of view is neither laid out nor painted: a status arriving for one of 150 repos then
+   costs the cards on screen, not the whole list. The size it remembers keeps the scrollbar steady. */
+.mbf-lazy {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 88px;
+}
+
+/* Content that replaces a skeleton appears without a jump. */
+@keyframes pop-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.pop-in {
+  animation: pop-in 140ms ease-out;
+}
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+.toast-in {
+  animation: toast-in 180ms ease-out;
+}
+
+/* ---- tooltip (rendered by ui/tooltip.ts) --------------------------------------------------- */
+/* Branch names as powerline segments: each segment a solid area ending in an arrow that reaches into
+   the next, like a shell prompt shows a path. Heights are fixed per size so rows keep their rhythm. */
+.mbf-segs {
+  --arrow: 7px;
+  display: inline-flex;
+  align-items: stretch;
+  min-width: 0;
+  max-width: 100%;
+  height: var(--seg-h, 21px);
+  font-family: var(--font-mono);
+  font-size: var(--seg-fs, 13px);
+  line-height: var(--seg-h, 21px);
+}
+.mbf-segs-xs { --seg-h: 16px; --seg-fs: 11px; --arrow: 5px; }
+.mbf-segs-sm { --seg-h: 18px; --seg-fs: 12px; --arrow: 6px; }
+.mbf-segs-base { --seg-h: 21px; --seg-fs: 13px; --arrow: 7px; }
+.mbf-segs-lg { --seg-h: 25px; --seg-fs: 14px; --arrow: 8px; }
+.mbf-seg {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  min-width: 0;
+  padding-inline: calc(var(--arrow) + 5px) calc(var(--arrow) + 3px);
+  white-space: nowrap;
+  /* Notch on the left takes the previous arrow; a 2 px seam keeps the segments apart. */
+  margin-left: calc(2px - var(--arrow));
+  clip-path: polygon(0 0, calc(100% - var(--arrow)) 0, 100% 50%, calc(100% - var(--arrow)) 100%, 0 100%, var(--arrow) 50%);
+}
+.mbf-seg:first-child {
+  margin-left: 0;
+  padding-left: 6px;
+  clip-path: polygon(0 0, calc(100% - var(--arrow)) 0, 100% 50%, calc(100% - var(--arrow)) 100%, 0 100%);
+}
+.mbf-seg-lead {
+  background: var(--seg-lead-bg);
+  color: var(--seg-lead-fg);
+}
+.mbf-seg-color {
+  background: color-mix(in oklab, var(--seg) var(--seg-color-mix), black);
+  color: var(--seg-on-color);
+  font-weight: 600;
+}
+/* Rows of a long list: the prefix keeps its colour as text on a tint of it, so a screen full of rows
+   reads calm while headers and the detail keep the filled prefix. */
+.mbf-segs-quiet .mbf-seg-color {
+  background: color-mix(in oklab, var(--seg) 20%, var(--seg-rest-bg));
+  color: color-mix(in oklab, var(--seg) 55%, var(--fg));
+}
+.mbf-seg-rest {
+  flex-shrink: 1000000;
+  /* Never shrunk to an empty arrow: a few letters and the ellipsis stay. */
+  min-width: calc(var(--arrow) * 2 + 8px + 4ch);
+  background: var(--seg-rest-bg);
+  color: var(--seg-rest-fg);
+}
+/* Once the name is down to those letters, namespace and prefix give way too; the tip has it all.
+   Flex shrinks in proportion to the factors: beside the name's huge one their share stays below a
+   pixel's fraction while the name can still give. Their own factor must not be below 1 – flex then
+   hands out only that fraction of the missing room, and the name would be pushed out of sight. */
+.mbf-seg-lead,
+.mbf-seg-color {
+  flex-shrink: 1;
+  min-width: calc(var(--arrow) * 2 + 8px + 1ch);
+}
+
+/* Cleanup table: one template (--cols, from the column model) for header, rows and skeleton. */
+.mbf-grid {
+  display: grid;
+  grid-template-columns: var(--cols);
+  column-gap: 12px;
+  align-items: center;
+  padding-inline: 16px;
+}
+/* Header and body reserve the same scrollbar gutter, so their columns line up. */
+.mbf-head,
+.mbf-virtual {
+  scrollbar-gutter: stable;
+}
+.mbf-head {
+  overflow-y: hidden;
+}
+
+/* Virtual lists keep their place themselves (restoreAnchor); the browser's anchoring would fight it. */
+.mbf-virtual {
+  overflow-anchor: none;
+}
+/* While a list scrolls, rows passing under a resting pointer neither light up nor open tooltips. */
+.mbf-virtual[data-scrolling] > * {
+  pointer-events: none;
+}
+
+.mbf-tooltip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  max-width: 340px;
+  overflow: hidden;
+  border: 1px solid var(--tooltip-border);
+  border-radius: 8px;
+  background: var(--tooltip-bg);
+  color: var(--tooltip-fg);
+  box-shadow: var(--tooltip-shadow);
+  font-size: var(--text-sm);
+  line-height: var(--text-sm--line-height);
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  /* No layer of its own: one composited apart is drawn as a picture, and its text goes soft. */
+  transition: opacity 110ms ease-out, visibility 0s linear 110ms;
+}
+.mbf-tooltip[data-open] {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 110ms ease-out, visibility 0s;
+}
+.mbf-tooltip[data-wide] {
+  max-width: 420px;
+}
+/* Head and body are separate surfaces; a tip without a body is just its head. */
+.mbf-tooltip-head,
+.mbf-tooltip-body {
+  padding: 6px 10px;
+}
+.mbf-tooltip[data-rich] {
+  min-width: 240px;
+}
+.mbf-tooltip[data-rich] .mbf-tooltip-head {
+  padding: 7px 10px 6px;
+  border-bottom: 1px solid var(--tooltip-line);
+  background: var(--tooltip-head);
+}
+.mbf-tooltip[data-rich] .mbf-tooltip-body,
+.mbf-tooltip[data-cards] .mbf-tooltip-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+}
+.mbf-tooltip[data-cards] .mbf-tooltip-body > .mbf-tooltip-text,
+.mbf-tooltip[data-rich] .mbf-tooltip-body > .mbf-tooltip-text,
+.mbf-tooltip[data-rich] .mbf-tooltip-body > .mbf-tooltip-rows,
+.mbf-tooltip[data-rich] .mbf-tooltip-body > .mbf-tooltip-list,
+.mbf-tooltip[data-rich] .mbf-tooltip-body > .mbf-tooltip-foot {
+  padding: 0 2px;
+}
+.mbf-tooltip-headline {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.mbf-tooltip-title {
+  flex: 1;
+  font-weight: 600;
+}
+/* A tip never grows past its max-width: a token longer than a line breaks rather than leave the box.
+   min-width: 0 lets flex and grid items shrink below their longest word, so the break can happen. */
+.mbf-tooltip-title,
+.mbf-tooltip-text,
+.mbf-tooltip-value,
+.mbf-tooltip-note,
+.mbf-tooltip-foot {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.mbf-tooltip-keys {
+  flex: none;
+  padding: 0 5px;
+  border: 1px solid var(--tooltip-line);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--tooltip-muted);
+}
+.mbf-tooltip-text {
+  white-space: pre-line;
+}
+.mbf-tooltip[data-rich] .mbf-tooltip-body > .mbf-tooltip-text {
+  color: var(--tooltip-muted);
+}
+/* Paths and URLs break after a separator (<wbr>); inside a single folder name only when nothing else fits. */
+.mbf-tooltip-path,
+.mbf-tooltip-url {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: var(--text-xs--line-height);
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+/* An atomic box: a piece that fits moves to the next line whole; only a piece wider than the line
+   wraps inside, at its hyphens first. */
+.mbf-tooltip-piece {
+  display: inline-block;
+  max-width: 100%;
+  vertical-align: top;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.mbf-tooltip-head .mbf-tooltip-path {
+  margin-top: 1px;
+  color: var(--tooltip-muted);
+}
+.mbf-tooltip-head .mbf-tooltip-path.mbf-tooltip-plain {
+  margin-top: 0;
+  color: var(--tooltip-fg);
+}
+.mbf-tooltip-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 5px;
+}
+.mbf-tooltip-pill {
+  flex: none;
+  padding: 0 6px;
+  border-radius: 999px;
+  color: color-mix(in oklab, var(--pill) 78%, var(--tooltip-fg));
+  background: color-mix(in oklab, var(--pill) 12%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--pill) 28%, transparent);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  line-height: 17px;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mbf-tooltip-pills:first-child {
+  margin-top: 0;
+}
+.mbf-tooltip-section {
+  padding: 6px 8px 7px;
+  border-radius: 6px;
+  background: var(--tooltip-card);
+}
+.mbf-tooltip-section-title {
+  margin-bottom: 3px;
+  color: var(--tooltip-muted);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.mbf-tooltip-note {
+  margin: -2px 0 4px;
+  color: var(--tooltip-muted);
+  font-size: var(--text-xs);
+}
+/* Neither column may outgrow the tip: a label longer than 40 % wraps, the value takes the rest. */
+.mbf-tooltip-rows {
+  display: grid;
+  grid-template-columns: fit-content(40%) minmax(0, 1fr);
+  gap: 3px 12px;
+  align-items: baseline;
+}
+.mbf-tooltip-gap {
+  height: 6px;
+}
+.mbf-tooltip-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.mbf-tooltip-label {
+  min-width: 0;
+  color: var(--tooltip-muted);
+  overflow-wrap: anywhere;
+}
+.mbf-tooltip-cell {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  gap: 2px 6px;
+}
+.mbf-tooltip-value {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+.mbf-tooltip-mono {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+/* A tip exists to show the whole name: the last segment wraps after "/" or "-" instead of being cut.
+   Too narrow even for that: whole segments move to the next line before any word is split. */
+.mbf-tooltip-branch .mbf-segs {
+  flex-wrap: wrap;
+  row-gap: 2px;
+  height: auto;
+  min-height: var(--seg-h);
+}
+.mbf-tooltip-branch .mbf-seg {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.mbf-tooltip-branch .mbf-seg-rest {
+  display: block;
+  line-height: var(--seg-h);
+}
+.mbf-tooltip-branch .mbf-segs {
+  vertical-align: middle;
+}
+.mbf-tooltip-count {
+  font-variant-numeric: tabular-nums;
+}
+.mbf-tooltip-current {
+  color: var(--tooltip-muted);
+  font-size: var(--text-xs);
+}
+.mbf-tone-safe { color: var(--safe); }
+.mbf-tone-review { color: var(--review); }
+.mbf-tone-unsafe { color: var(--unsafe); }
+.mbf-tone-blocked { color: var(--blocked); }
+.mbf-tone-accent { color: var(--accent); }
+.mbf-tone-muted { color: var(--tooltip-muted); }
+.mbf-tooltip-bars {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 4px 8px;
+  align-items: center;
+}
+.mbf-tooltip-bar {
+  height: 6px;
+  min-width: 80px;
+  border-radius: 3px;
+  background: var(--tooltip-line);
+}
+.mbf-tooltip-bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: var(--pill);
+}
+.mbf-tooltip-bars .mbf-tooltip-count {
+  text-align: right;
+}
+.mbf-tooltip-foot {
+  color: var(--tooltip-muted);
+  font-size: var(--text-xs);
+  white-space: pre-line;
+}
+
+/* Motion is a setting (data-motion on the root): "off" never animates, "system" follows the operating
+   system, "on" always. Without motion: no transition at all rather than a short one (transition-property
+   defaults to "all", so a forced duration would animate every layout change one frame late). What was a
+   moving band stands still as a calm tint, after the same pause, so a quick answer still shows nothing. */
+@layer base {
+  :root[data-motion="off"] *,
+  :root[data-motion="off"] *::before,
+  :root[data-motion="off"] *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition: none !important;
+  }
+}
+:root[data-motion="off"] .mbf-refreshing::after {
+  transform: none;
+  background: color-mix(in oklab, var(--accent) 9%, transparent);
+  animation: refresh-in 0.01ms linear 0.25s forwards !important;
+}
+:root[data-motion="off"] .skeleton::after {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root[data-motion="system"] *,
+  :root[data-motion="system"] *::before,
+  :root[data-motion="system"] *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition: none !important;
+  }
+  :root[data-motion="system"] .mbf-refreshing::after {
+    transform: none;
+    background: color-mix(in oklab, var(--accent) 9%, transparent);
+    animation: refresh-in 0.01ms linear 0.25s forwards !important;
+  }
+  :root[data-motion="system"] .skeleton::after {
+    display: none;
+  }
+}
+
+/* Diff viewer: line and word marks, gutter, hunk bar, and the syntax colours of highlight.js scopes. */
+.mbf-diff-add { background: var(--diff-add-bg); }
+.mbf-diff-del { background: var(--diff-del-bg); }
+.mbf-diff-add .mbf-diff-gutter { background: var(--diff-add-gutter); }
+.mbf-diff-del .mbf-diff-gutter { background: var(--diff-del-gutter); }
+.mbf-diff-add .mbf-diff-word { background: var(--diff-add-word); border-radius: 2px; }
+.mbf-diff-del .mbf-diff-word { background: var(--diff-del-word); border-radius: 2px; }
+.mbf-diff-empty { background: var(--diff-empty); }
+.mbf-diff-hunk { background: var(--diff-hunk-bg); color: var(--diff-hunk-fg); }
+/* A chosen line: a frame around it, the line keeps its colour. The left edge is never the selection's. */
+.mbf-diff-chosen { box-shadow: inset 0 0 0 1px var(--diff-chosen); }
+/* The sideways scrollbars of the split view reserve the list's scrollbar gutter, so their halves
+   line up with the halves of the rows above. */
+.mbf-diff-hbars { overflow-y: hidden; scrollbar-gutter: stable; }
+.mbf-diff-eol { line-height: 16px; }
+.syn-kw { color: var(--syn-kw); }
+.syn-str { color: var(--syn-str); }
+.syn-num { color: var(--syn-num); }
+.syn-com { color: var(--syn-com); font-style: italic; }
+.syn-fn { color: var(--syn-fn); }
+.syn-type { color: var(--syn-type); }
+.syn-attr { color: var(--syn-attr); }
+.syn-tag { color: var(--syn-tag); }
+.syn-meta { color: var(--syn-meta); }
+.syn-var { color: var(--syn-var); }
+
+/* The short sign of a root folder: its initials on a tint of its colour, framed in it. */
+.mbf-root-badge {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  height: 18px;
+  min-width: 18px;
+  padding: 0 4px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: color-mix(in oklab, var(--root) 55%, var(--fg));
+  background-color: color-mix(in oklab, var(--root) 16%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--root) 45%, transparent);
+}
+
+/* A count beside a label ("Alle Repos 10", "Safe 59", "+2"): a quiet tint of the text colour, so it reads
+   as a number of something on any surface without a colour of its own. */
+/* A key as a cap: framed like the counters, in the mono face, one cap per key. */
+.mbf-kbd {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  border: 1px solid var(--line-strong);
+  border-radius: 0.25rem;
+  padding: 0 6px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--muted);
+}
+.mbf-count {
+  display: inline-block;
+  border-radius: 0.25rem;
+  padding: 1px 6px;
+  font-size: var(--text-xs);
+  line-height: 1.35;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+  background-color: color-mix(in oklab, var(--fg) 8%, transparent);
+}
+
+/* The label of a working copy in its repo's colour (--pill); the colour is mixed with the text colour
+   so the label reads on its own tint in both themes. */
+/* Cut at the start: copies of one repo differ at the end of their label ("feature1", "feature2"), so the
+   ellipsis goes in front. The text itself stays left to right inside its isolate (bdi). */
+.mbf-truncate-start {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  direction: rtl;
+  text-align: left;
+}
+.mbf-copy-pill {
+  color: color-mix(in oklab, var(--pill) 58%, var(--fg));
+  background: color-mix(in oklab, var(--pill) 14%, transparent);
+}
+
+/* A table group reads as one block: its header and every row carry the same bar on the left, stronger on
+   the header. Space above each header parts the groups; the top of the header is painted in the card's
+   colour (the list rows have one fixed height, so no gap row can do it). */
+/* One meaning per place: the left edge is the repo's own colour, the selection is a frame and a fill.
+   A bar for the selection on top of it would make two bars compete for the same edge. */
+.mbf-selected {
+  background-color: var(--sel-bg) !important;
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--accent) 55%, transparent);
+}
+.mbf-selected-card {
+  border-color: color-mix(in oklab, var(--accent) 70%, transparent) !important;
+  background-color: var(--sel-bg) !important;
+}
+/* The one of several selected that the detail and the actions follow. */
+.mbf-current {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+/* The repo the view follows, among several: a line under its head, the left edge stays its colour. */
+.mbf-current-head {
+  box-shadow: inset 0 -2px 0 var(--accent);
+}
+
+.mbf-guide {
+  margin-left: 11.5px;
+  padding-left: 4px;
+  border-left: 1px solid color-mix(in oklab, var(--line-strong) 70%, transparent);
+}
+
+/* The cards of a sidebar folder: one step in, the line starting under the folder's chevron. */
+.mbf-guide-cards {
+  margin-left: 14.5px;
+  padding-left: 6px;
+  padding-bottom: 2px;
+  border-left: 1px solid color-mix(in oklab, var(--line-strong) 70%, transparent);
+}
+
+/* The worktrees of a repo card: one step in under the repo, the line under the repo's icon. */
+.mbf-guide-wt {
+  margin-left: 25.5px;
+  padding-left: 2px;
+}
+.mbf-guide-wt > * {
+  border-left: 1px solid color-mix(in oklab, var(--line-strong) 70%, transparent);
+}
+
+/* A row of a repo the user gave a colour: a stripe on its left edge, as on the repo's card in the sidebar.
+   The host is positioned already (a list row's slot, a sticky head). */
+.mbf-tint-edge::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 3px;
+  pointer-events: none;
+  background: var(--tint-line);
+}
+
+/* A repo's node in a tree (its head and every row under it) carries its identity as one line, from the head
+   down to its last row: one mark for the whole node instead of a stripe per row. The line has a gutter of its
+   own, so it never runs under a chevron, an icon or text; a repo without a colour keeps the gutter, so the
+   nodes stay on one edge. In a virtual list each row draws its piece, the pieces meet without a seam, and
+   the first and the last piece start and end the line a little inside the node. */
+.mbf-id-seg {
+  position: relative;
+  padding-left: 6px;
+}
+.mbf-id-seg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 3px;
+  pointer-events: none;
+  background: var(--tint-line);
+}
+.mbf-id-seg:is([data-piece="first"], [data-piece="only"])::before {
+  top: 2px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+}
+.mbf-id-seg:is([data-piece="last"], [data-piece="only"])::before {
+  bottom: 2px;
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+
+/* The group's bar is structure, not state: neutral, so a repo's colour drawn over it and the frame of the
+   selection stay what they mean. */
+.mbf-group-head {
+  box-shadow: inset 0 8px 0 var(--panel), inset 3px 0 0 var(--line-strong);
+}
+.mbf-group-row {
+  box-shadow: inset 3px 0 0 color-mix(in oklab, var(--line-strong) 70%, transparent);
+}
+.mbf-group-row.mbf-selected {
+  box-shadow: inset 3px 0 0 var(--line-strong), inset 0 0 0 1px color-mix(in oklab, var(--accent) 55%, transparent);
+}
+
+/* A floating layer. Inside it panel and hover are re-pointed, so sticky headers and the active row
+   follow the lighter surface instead of cutting dark bands into it. */
+.mbf-popover {
+  --panel: var(--popover);
+  --panel-2: var(--popover-2);
+  --hover: var(--popover-hover);
+  background-color: var(--popover);
+  border: 1px solid var(--popover-line);
+  box-shadow: var(--popover-shadow);
+}
+
+/* The host of a menu opened over a modal dialog: only its top-layer place counts, the menu inside
+   is fixed to the viewport as usual. */
+dialog.mbf-menu-host {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  width: 0;
+  height: 0;
+  max-width: none;
+  max-height: none;
+  overflow: visible;
+  background: transparent;
+}
+dialog.mbf-menu-host::backdrop {
+  background: transparent;
+  backdrop-filter: none;
+}
+
+/* While something is dragged onto a target: the hand everywhere, no text selection on the way. */
+body.mbf-dragging,
+body.mbf-dragging * {
+  cursor: grabbing !important;
+  user-select: none;
+}

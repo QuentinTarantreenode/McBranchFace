@@ -1,0 +1,9 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "McBranchFace E2E",
+  "identifier": "app.mcbranchface.e2e",
+  "build": {
+    "beforeBuildCommand": null,
+    "frontendDist": "../build-e2e"
+  }
+}

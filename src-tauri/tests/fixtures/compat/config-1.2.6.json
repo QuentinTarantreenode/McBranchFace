@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 1,
+  "roots": [
+    "C:/dev/workspace",
+    "D:/src"
+  ],
+  "scanDepth": 5,
+  "protectedPatterns": [
+    "main",
+    "master",
+    "develop",
+    "release/*",
+    "releases/*",
+    "dev",
+    "test",
+    "prod",
+    "staging",
+    "production",
+    "hotfix/*",
+    "team/keep-*"
+  ],
+  "protectedDefaultsKnown": [
+    "main",
+    "master",
+    "develop",
+    "release/*",
+    "releases/*",
+    "dev",
+    "test",
+    "prod",
+    "staging",
+    "production"
+  ],
+  "defaultBranchOverrides": {
+    "C:/dev/workspace/platform": "refs/remotes/origin/develop"
+  },
+  "defaultBranchCandidates": [
+    "main",
+    "master",
+    "develop"
+  ],
+  "myEmails": [
+    "dev@example.com",
+    "dev@users.noreply.example.com"
+  ],
+  "fetchOnScan": true,
+  "useProviders": true,
+  "concurrency": 8,
+  "theme": "Dark",
+  "ui": {
+    "perspective": "Dashboard",
+    "sidebarCollapsed": true,
+    "detailCollapsed": false,
+    "sidebarWidth": 300,
+    "detailWidth": 380,
+    "alwaysOnTop": false,
+    "cleanupScope": "Local",
+    "collapsedRoots": [
+      "D:/src"
+    ],
+    "tableGroup": "None",
+    "collapsedGroups": [],
+    "tableLayout": {
+      "local": [],
+      "online": [],
+      "branches": []
+    },
+    "dialogSizes": {},
+    "scale": 100,
+    "diffSplit": false,
+    "orphanedOnly": true,
+    "collapsedRepoGroups": [],
+    "groupSplit": 50,
+    "gitChangesAll": false,
+    "gitChangesByFolder": false,
+    "collapsed": {},
+    "gitChangesTree": false,
+    "gitBranchGroup": "None",
+    "motion": "on",
+    "activityShown": false,
+    "dashboardPrs": "mine",
+    "dashboardDismissed": {},
+    "watchFiles": true,
+    "watchRefs": true,
+    "refsGapSeconds": 30
+  },
+  "autoFetchMinutes": 30,
+  "language": "Auto",
+  "locks": [
+    {
+      "identity": "github.com/example/shop",
+      "branch": "feature/payment"
+    },
+    {
+      "identity": "dev.azure.com/example/platform/_git/core",
+      "branch": null
+    }
+  ],
+  "alerts": {
+    "enabled": true,
+    "notify": true,
+    "localSafe": true,
+    "localReview": true,
+    "onlineMerged": true,
+    "onlineInactive": false,
+    "localForgotten": true
+  },
+  "staleDays": 45,
+  "scanOnline": true,
+  "onlineExcluded": [
+    "dev.azure.com/example/platform/_git/monorepo"
+  ],
+  "ignores": [
+    {
+      "identity": "github.com/example/shop",
+      "branch": "spike/old-idea",
+      "scope": "Local",
+      "until": 1893456000
+    },
+    {
+      "identity": "github.com/example/shop",
+      "branch": "chore/cleanup",
+      "scope": "Both",
+      "until": null
+    },
+    {
+      "identity": "dev.azure.com/example/platform/_git/core",
+      "branch": "experiment/cache",
+      "scope": "Online",
+      "until": null
+    }
+  ],
+  "annotations": {
+    "github.com/example/shop": {
+      "note": "Customer-facing shop",
+      "tags": [
+        "web"
+      ]
+    },
+    "github.com/example/shop::feature/payment": {
+      "note": "Waits for the payment sandbox",
+      "tags": [
+        "blocked"
+      ]
+    }
+  },
+  "serverCheckMinutes": 5,
+  "diagnostics": false,
+  "window": {
+    "closeToTray": true,
+    "minimizeToTray": true,
+    "autostart": false,
+    "startHidden": true
+  },
+  "commands": [
+    {
+      "id": "build",
+      "name": "Build",
+      "script": "npm run build",
+      "shell": "Pwsh",
+      "mode": "Background",
+      "repos": [
+        "github.com/example/shop"
+      ],
+      "branches": true,
+      "confirm": true
+    }
+  ],
+  "prompts": [
+    {
+      "id": "review",
+      "name": "Review",
+      "body": "Review {{branch}} against {{default}}.",
+      "scope": "Local",
+      "needsOwnCommits": true,
+      "builtin": null
+    }
+  ],
+  "repoColors": {},
+  "repoGroups": [
+    {
+      "id": "g-shop",
+      "name": "Shop",
+      "paths": [
+        "C:/dev/workspace/shop",
+        "C:/dev/workspace/shop-agent-1"
+      ]
+    }
+  ],
+  "identities": {
+    "repo:github.com/example/shop": {
+      "short": "SH",
+      "color": "id-3"
+    }
+  }
+}

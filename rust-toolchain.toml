@@ -1,0 +1,6 @@
+# The toolchain every gate and release is built with; CI installs the same one. Raise it on purpose,
+# together with fixing what the new clippy finds.
+[toolchain]
+channel = "1.98.1"
+profile = "minimal"
+components = ["clippy"]
