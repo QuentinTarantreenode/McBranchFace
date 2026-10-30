@@ -209,7 +209,7 @@
   </ToolGroup>
   {/if}
 
-  <div class="ml-auto flex items-center gap-2">
+  <div class="ml-auto flex shrink-0 items-center gap-2">
     {#if !environment.needsOnboarding}
       <ToolGroup label={t.top.noticeGroup}>
         <IconButton
