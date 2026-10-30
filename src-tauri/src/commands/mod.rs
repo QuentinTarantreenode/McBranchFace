@@ -124,6 +124,7 @@ mod tests {
         ("git_apply_selection", Runs::Index),
         ("git_commit", Runs::Repo),
         ("git_remote", Runs::Repo),
+        ("git_clone", Runs::Exempt("creates a new folder; no existing repository is involved")),
         ("git_cancel", Runs::Exempt("signals a running operation, which holds its own lock")),
         ("free_copy_folders", Runs::ReadOnly),
         ("check_copy_targets", Runs::ReadOnly),

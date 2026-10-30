@@ -150,6 +150,7 @@ pub fn run() {
             commands::git::git_discard,
             commands::git::git_commit,
             commands::git::git_remote,
+            commands::git::git_clone,
             commands::git::git_cancel,
             commands::copies::free_copy_folders,
             commands::copies::check_copy_targets,

@@ -94,6 +94,22 @@ impl Git {
         process::run_streaming("git", all, Some(&self.dir), ENV, timeout, cancel, on_line).await
     }
 
+    /// `stream` for a call to the server: it never waits on a stalled transfer, and without
+    /// `Prompts::Allowed` it never asks the user.
+    pub async fn stream_network(
+        &self,
+        args: &[&str],
+        prompts: Prompts,
+        timeout: Duration,
+        cancel: std::sync::Arc<tokio::sync::Notify>,
+        on_line: impl FnMut(&str) + Send,
+    ) -> Result<ProcOutput, crate::process::ProcError> {
+        let ssh_configured = prompts == Prompts::Never && self.ssh_configured().await;
+        let env: Vec<(&str, &str)> = ENV.iter().copied().chain(network_env(prompts, ssh_configured)).collect();
+        let all = BASE_ARGS.iter().chain(STALL_ARGS).chain(args.iter());
+        process::run_streaming("git", all, Some(&self.dir), &env, timeout, cancel, on_line).await
+    }
+
     /// Stdout of a command that is expected to succeed.
     pub async fn out(&self, args: &[&str]) -> Result<String> {
         self.out_with_env(args, &[]).await

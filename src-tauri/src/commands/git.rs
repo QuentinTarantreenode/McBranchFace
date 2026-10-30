@@ -227,6 +227,21 @@ pub async fn git_remote(app: AppHandle, state: State<'_, AppState>, path: String
     result
 }
 
+/// Clones `url` into the new folder `target`, with `op-progress` events; `id` lets the UI cancel it. No
+/// repository exists yet, so there is nothing to lock.
+#[tauri::command]
+pub async fn git_clone(app: AppHandle, state: State<'_, AppState>, url: String, target: String, id: String) -> OpResultCmd {
+    let cancel = std::sync::Arc::new(tokio::sync::Notify::new());
+    lock(&state.running_ops).insert(id.clone(), cancel.clone());
+    let emit_id = id.clone();
+    let result = gitops::clone::clone_repo(&url, &target, cancel, move |phase, percent| {
+        let _ = app.emit("op-progress", OpProgress { id: emit_id.clone(), op: GitOp::Clone, phase, percent });
+    })
+    .await;
+    lock(&state.running_ops).remove(&id);
+    result
+}
+
 #[tauri::command]
 pub fn git_cancel(state: State<'_, AppState>, id: String) {
     if let Some(n) = lock(&state.running_ops).get(&id) {
