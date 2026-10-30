@@ -29,7 +29,7 @@ pub fn open_terminal(dir: &Path) -> Result<()> {
                 return Ok(());
             }
         }
-        return Err(AppError::new(ErrorCode::NoTerminal, "").into());
+        Err(AppError::new(ErrorCode::NoTerminal, "").into())
     }
 }
 
@@ -64,7 +64,7 @@ pub fn run_in_terminal(command: &str) -> Result<()> {
                 return Ok(());
             }
         }
-        return Err(AppError::new(ErrorCode::NoTerminal, "").into());
+        Err(AppError::new(ErrorCode::NoTerminal, "").into())
     }
 }
 
