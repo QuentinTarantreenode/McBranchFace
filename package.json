@@ -27,7 +27,7 @@
     "release": "node scripts/release.mjs",
     "mutants": "cargo mutants --dir src-tauri --file src/delete*.rs --file src/actions.rs --file src/gitops/ops.rs --file src/gitops/copies.rs --file src/assess*.rs"
   },
-  "license": "MIT",
+  "license": "AGPL-3.0-only",
   "dependencies": {
     "@lucide/svelte": "^1.48.0",
     "@tauri-apps/api": "^2",

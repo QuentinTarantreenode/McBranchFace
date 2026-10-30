@@ -30,4 +30,4 @@ npm run tauri build    # build the installer
 [Shortcuts](docs/shortcuts.md) · [Development](docs/development.md) · [AGENTS.md](AGENTS.md) ·
 [Changelog](CHANGELOG.md)
 
-MIT license, see [LICENSE](LICENSE).
+Licensed under the [GNU AGPL v3](LICENSE).

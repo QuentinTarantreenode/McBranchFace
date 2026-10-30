@@ -3,7 +3,7 @@ name = "mcbranchface"
 version = "1.3.0"
 description = "A Git client for many repos, worktrees and agents, with safe branch cleanup"
 authors = ["McBranchFace contributors"]
-license = "MIT"
+license = "AGPL-3.0-only"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

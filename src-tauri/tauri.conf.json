@@ -31,7 +31,7 @@
     "active": true,
     "targets": "all",
     "publisher": "McBranchFace contributors",
-    "copyright": "Copyright (c) 2026 McBranchFace contributors, MIT License",
+    "copyright": "Copyright (c) 2026 McBranchFace contributors, GNU AGPL v3",
     "shortDescription": "A Git client for many repos, worktrees and agents, with safe branch cleanup",
     "icon": [
       "icons/32x32.png",
