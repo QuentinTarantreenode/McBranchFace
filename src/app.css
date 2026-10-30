@@ -5,6 +5,29 @@
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
+/* Selawik has no 500 weight: the browser uses its regular for font-medium. */
+@font-face {
+  font-family: "Selawik";
+  src: url("./assets/fonts/selawik-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "Selawik";
+  src: url("./assets/fonts/selawik-semibold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "Selawik";
+  src: url("./assets/fonts/selawik-bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: block;
+}
+
 /* The theme attribute is always set (config is the single source), so no prefers-color-scheme block. */
 :root {
   --bg: #f4f5f9;
@@ -217,8 +240,8 @@
   --color-blocked: var(--blocked);
   --shadow-panel: var(--shadow);
 
-  /* System fonts: native look on every OS and nothing to download or embed. */
-  --font-sans: "Segoe UI Variable Text", "Segoe UI", -apple-system, BlinkMacSystemFont, system-ui, Ubuntu, sans-serif;
+  /* Selawik is embedded so every OS draws the same text widths (see assets/fonts/OFL.txt). */
+  --font-sans: "Selawik", "Segoe UI", -apple-system, BlinkMacSystemFont, system-ui, Ubuntu, sans-serif;
   --font-mono: "Cascadia Mono", "Cascadia Code", "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;
 
   /* Type scale — the only font sizes in the app. */
