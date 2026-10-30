@@ -219,14 +219,25 @@ async fn a_cancelled_scan_ends_its_processes_and_keeps_what_landed() {
     let sink = Collect::default();
     let started = std::time::Instant::now();
     let cancel = deps.cancel.clone();
-    let stop = async {
-        tokio::time::sleep(std::time::Duration::from_secs(2)).await;
-        cancel.cancel();
-    };
-    let (done, ()) = tokio::join!(run_scan(&deps, &sink, ScanRequest { fetch: true, ..Default::default() }), stop);
-    assert!(done.cancelled);
-    assert!(started.elapsed() < std::time::Duration::from_secs(10), "the fetches waiting 30 s were ended: {:?}", started.elapsed());
     let fast_base = fast.base().to_string_lossy().to_string();
+    let fast_copies = fast.copies().len();
+    // Cancelled once the fast repository has reported, not after a fixed time: a slow runner needs longer for
+    // its fetch. The slow one waits 30 s, so the bound below only ends a scan that never reports.
+    let stop = async {
+        let bound = std::time::Instant::now() + std::time::Duration::from_secs(20);
+        while std::time::Instant::now() < bound {
+            let reported = sink.repos.lock().unwrap().iter().filter(|r| r.repo.path.starts_with(&fast_base)).count();
+            if reported >= fast_copies {
+                break;
+            }
+            tokio::time::sleep(std::time::Duration::from_millis(20)).await;
+        }
+        cancel.cancel();
+        std::time::Instant::now()
+    };
+    let (done, cancelled_at) = tokio::join!(run_scan(&deps, &sink, ScanRequest { fetch: true, ..Default::default() }), stop);
+    assert!(done.cancelled);
+    assert!(cancelled_at.elapsed() < std::time::Duration::from_secs(10), "the fetches waiting 30 s were ended: {:?}", started.elapsed());
     let landed: Vec<String> = sink.repos.lock().unwrap().iter().map(|r| r.repo.path.clone()).collect();
     assert_eq!(landed.iter().filter(|p| p.starts_with(&fast_base)).count(), fast.copies().len(), "the fast repository's results stay: {landed:?}");
     assert_eq!(state.results().len(), landed.len(), "and only those landed");
