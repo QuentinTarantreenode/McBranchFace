@@ -269,7 +269,7 @@ export const en: CoreDict = {
     removeHint: "Deletes only the group. The repos stay as they are.",
     nameLabel: "Group name",
     missing: "not reachable",
-    missingTip: "This working copy was not found in the last scan. The menu takes it out of the group.",
+    missingTip: "Not found in the last scan. The menu removes this working copy from the group.",
     addToMenu: "Add to group",
     addToNew: "New group",
     branches: "Branches",
