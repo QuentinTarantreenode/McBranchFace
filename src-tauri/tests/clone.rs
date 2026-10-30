@@ -12,6 +12,13 @@ fn url(f: &Fixture) -> String {
     f.server.parent().unwrap().join("origin.git").to_string_lossy().into_owned()
 }
 
+/// The same repository as a URL: git copies a plain local path without transferring objects, so only a URL
+/// shows the progress of a real clone.
+fn file_url(f: &Fixture) -> String {
+    let path = url(f).replace('\\', "/");
+    if path.starts_with('/') { format!("file://{path}") } else { format!("file:///{path}") }
+}
+
 async fn clone_to(url: &str, target: &std::path::Path) -> Result<OpResult, OpFailure> {
     clone::clone_repo(url, &target.to_string_lossy(), Arc::new(Notify::new()), |_, _| {}).await
 }
@@ -23,7 +30,7 @@ async fn a_repository_is_cloned_into_a_new_folder_with_progress() {
     let target = f._tmp.path().join("nested").join("deeper").join("copy");
     let seen = Arc::new(Mutex::new(Vec::new()));
     let sink = seen.clone();
-    let r = clone::clone_repo(&url(&f), &target.to_string_lossy(), Arc::new(Notify::new()), move |phase, pct| sink.lock().unwrap().push((phase, pct))).await.unwrap();
+    let r = clone::clone_repo(&file_url(&f), &target.to_string_lossy(), Arc::new(Notify::new()), move |phase, pct| sink.lock().unwrap().push((phase, pct))).await.unwrap();
     assert_eq!(r.sha.as_deref(), Some(git(&target, &["rev-parse", "HEAD"]).as_str()));
     assert_eq!(git(&target, &["rev-parse", "--abbrev-ref", "HEAD"]), "main");
     assert!(git(&target, &["branch", "-r"]).contains("origin/feature/a"));

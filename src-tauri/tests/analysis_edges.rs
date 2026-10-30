@@ -315,6 +315,8 @@ async fn a_branch_whose_worktree_folder_was_deleted_stays_listed() {
     assert!(git(&f.work, &["branch", "--list", "feature/lost-wt"]).is_empty());
 }
 
+// Upper case is another spelling of the same folder only on Windows.
+#[cfg(windows)]
 #[tokio::test]
 async fn a_default_branch_override_applies_however_the_folder_is_spelled() {
     let f = Fixture::new();

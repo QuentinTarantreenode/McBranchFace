@@ -136,6 +136,16 @@ async fn merged_branch_is_deleted_on_the_server_and_restored() {
     assert_eq!(again.downcast_ref::<AppError>().map(|e| e.code), Some(ErrorCode::AlreadyRestored));
 }
 
+/// A server-side hook script: git runs it only where it is executable, which Windows does not ask for.
+fn write_hook(path: &std::path::Path, script: &str) {
+    std::fs::write(path, script).unwrap();
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::PermissionsExt;
+        std::fs::set_permissions(path, std::fs::Permissions::from_mode(0o755)).unwrap();
+    }
+}
+
 /// The push of a restore can take minutes on a slow server. Another repo's delete appends to the
 /// journal meanwhile, and the restore's write afterwards must not drop that line.
 #[tokio::test]
@@ -145,12 +155,7 @@ async fn a_delete_journaled_while_a_restore_pushes_keeps_its_entry() {
     let list = assess(&f, &c.config).await;
     let out = c.delete(&f, by(&list, "done/squash"), false).await.expect("delete");
     let hook = f.work.parent().unwrap().join("origin.git").join("hooks").join("pre-receive");
-    std::fs::write(&hook, "#!/bin/sh\nsleep 2\n").unwrap();
-    #[cfg(unix)]
-    {
-        use std::os::unix::fs::PermissionsExt;
-        std::fs::set_permissions(&hook, std::fs::Permissions::from_mode(0o755)).unwrap();
-    }
+    write_hook(&hook, "#!/bin/sh\nsleep 2\n");
     let other = DeletedEntry::new("C:/elsewhere/repo", "feature/x", "feature/x", "abc", "refs/mcbranchface/backup/1/feature/x", 1);
     let (restored, appended) = tokio::join!(actions::restore(&c.journal, &out.entry.id), async {
         tokio::time::sleep(std::time::Duration::from_millis(500)).await;
@@ -235,7 +240,7 @@ async fn locked_branch_is_refused_even_with_force() {
 async fn server_that_refuses_the_delete_is_reported_as_rejected() {
     let f = server_with_branches();
     let origin = f.work.parent().unwrap().join("origin.git");
-    std::fs::write(origin.join("hooks").join("pre-receive"), "#!/bin/sh\necho protected >&2\nexit 1\n").unwrap();
+    write_hook(&origin.join("hooks").join("pre-receive"), "#!/bin/sh\necho protected >&2\nexit 1\n");
     let c = Ctx::new(&f, f.config());
     let list = assess(&f, &c.config).await;
     let e = c.delete(&f, by(&list, "done/ff"), false).await.unwrap_err();
@@ -297,11 +302,10 @@ async fn bulk_delete_goes_to_the_server_once_and_reports_each_branch() {
     let f = server_with_branches();
     // The update hook runs per ref: exactly one branch is refused, the others go.
     let origin = f.work.parent().unwrap().join("origin.git");
-    std::fs::write(
-        origin.join("hooks").join("update"),
+    write_hook(
+        &origin.join("hooks").join("update"),
         "#!/bin/sh\nif [ \"$1\" = \"refs/heads/done/ff\" ]; then echo protected >&2; exit 1; fi\nexit 0\n",
-    )
-    .unwrap();
+    );
     let c = Ctx::new(&f, f.config());
     let list = assess(&f, &c.config).await;
     let reqs: Vec<RemoteDeleteRequest> = ["done/ff", "done/squash", "wip/old"]
